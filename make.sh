@@ -1,6 +1,8 @@
 #!/bin/sh
 
 npm install
-grunt build
+grunt compile
 
+browserify --entry out/trm.js --outfile lib/trm.compile.js
+noder
 
