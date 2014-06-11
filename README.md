@@ -49,6 +49,10 @@ Tracking management client javascript code
     });
 ````
 
+##
+
+ * need to uglify
+
 ##Ref
 
  * [browser-request](https://github.com/iriscouch/browser-request)
