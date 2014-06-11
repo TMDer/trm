@@ -48,3 +48,9 @@ Tracking management client javascript code
       window.analytics.push("NTD", "168");
     });
 ````
+
+##Ref
+
+ * [browser-request](https://github.com/iriscouch/browser-request)
+ * [browserify](http://browserify.org/)
+ * [segment.io](https://github.com/segmentio/analytics.js)
