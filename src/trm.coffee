@@ -8,8 +8,8 @@
 request = require('browser-request')
 
 class TRM
-  constructor: (@clientId) ->
-    @.clientId = clientId
+  constructor: () ->
+    return @
 
   host: (host) ->
     @.host = host
@@ -17,27 +17,31 @@ class TRM
   initial: (key) ->
     @.key = key
 
-  send: () ->
+  send: (path, key, value) ->
     # request 'https://api.github.com/users/octocat/orgs', (er, res) ->
-    request 'https://tw.yahoo.com/', (er, res) ->
-      if !er
-        return console.log('browser-request got your root path:\n' + res.body)
+    try
+      request "#{@.host}#{path}", (er, res) ->
+        if !er
+          return console.log('browser-request got your root path:\n' + res.body)
 
-      console.log('There was an error, but at least browser-request loaded and ran!')
+        console.log('There was an error, but at least browser-request loaded and ran!')
+    catch error
+      return console.log("send request, error happen")
 
   push: (key, value) ->
     if typeof key is "object"
       items = key
       items.forEach (val, key) ->
         @._call val, key
+      return @
 
-    if key and value
-      @._call val key
+    @._call key, value
+    return @
 
   _call: (key, value) ->
-    console.log "key and value"
+    console.log "key, #{key}, value #{value}"
 
-host = "http://localhost:1337/tracking"
-
-# exports.hello = "hello"
-# module.exports = TRM
+global = window || module.exports
+global.analytics = global.analytics || []
+global.analytics = new TRM()
+global.analytics.host = "http://localhost:1337"
