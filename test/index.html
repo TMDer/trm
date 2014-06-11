@@ -1,0 +1,35 @@
+<!DOCTYPE html>
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="zh-CN" lang="zh-CN">
+<head>
+<meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+<meta name="keywords" content="" />
+<meta name="description" content="" />
+<meta name="generator" content="gvim" />
+<meta name="author" content="" />
+<link rel="icon" href="favicon.ico" type="image/x-icon" />
+<link rel="shortcut icon" href="favicon.ico" type="image/x-icon" />
+<title>Index</title>
+</head>
+<body>
+  <h1>Test</h1>
+  <script>
+    var trmHost = "localhost:1337/out/trm.compile.js";
+    window.analytics = window.analytics || [];
+    window.analytics.load = function (t) {
+        console.log("hello")
+        console.log(trmHost)
+        if (!document.getElementById("analytics-js")) {
+            console.log("run")
+            var a = document.createElement("script");
+            a.type = "text/javascript", a.id = "analytics-js", a.async = !0, a.src = ("https:" === document.location.protocol ? "https://" : "http://") + trmHost;
+            console.log(a);
+            var n = document.getElementsByTagName("script")[0];
+            n.parentNode.insertBefore(a, n);
+            console.log(n);
+        }
+    }, window.analytics.SNIPPET_VERSION = "2.0.9";
+    window.analytics.load("YOUR_WRITE_KEY");
+    console.log(window.analytics);
+  </script>
+</body>
+</html>
