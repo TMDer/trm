@@ -2,17 +2,18 @@
   "name": "trm",
   "version": "0.0.1",
   "description": "tracking management client code",
-  "main": "node ./lib/index.js",
+  "main": "node ./lib/trm.compile.js",
   "directories": {
     "test": "test"
   },
   "scripts": {
-    "compile": "grunt complie",
+    "compile": "grunt compile",
     "watch": "grunt watch",
-    "start": "node out/app.js"
+    "start": "noder"
   },
   "dependencies": {
-    "browser-request": "~0.3.1"
+    "browser-request": "~0.3.1",
+    "noder": "0.0.10"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
