@@ -125,8 +125,8 @@ class TRM
 
   push: (key, value) ->
 
-    console.log key
-    console.log typeof key
+    # console.log key
+    # console.log typeof key
     if typeof key is "object"
       items = key
       items.forEach (val, key) ->
