@@ -43,9 +43,10 @@ Tracking management client javascript code
     }, window.analytics.SNIPPET_VERSION = "2.0.9";
 
     window.analytics.load(function () {
-      window.analytics.send("/page");
+      window.analytics.initial("1");
       window.analytics.push("id", "abc");
       window.analytics.push("NTD", "168");
+      window.analytics.send("");
     });
 ````
 
