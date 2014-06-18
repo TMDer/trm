@@ -15,6 +15,7 @@ uuid = require('node-uuid')
 class TRM
   constructor: () ->
     @.host = "http://localhost:1337/track"
+    # @.host = "http://localhost:3000/"
     @.params = {}
     @.KEYS = {
       ID: "pmd.uuid"
@@ -28,25 +29,25 @@ class TRM
     return @
 
   _prepareData: () ->
-    @._initParams()
-    @._initCookie()
+    # it will get params and get params from data, and update cookie
+    param = @._initParams()
+    return param
 
   _initParams: () ->
     # get uuid from cookie
     param = {}
     uuid = @._getTrmUuid()
-    #parse track Pixel
+    #get adgroup ID, from local cookie or url params
     aid = @._getAdGroupId()
-    # unless uuid
-    #   if pid and aid
-    #     uuid = initUuid()
 
+    # set all param
     param = {
-      trackPixel: @.id || 0
-      adGroup: aid || 0
+      trackPixelId: @.id || 0
+      adGroupId: aid || 0
       referer: document.referrer || ""
       id: uuid
     }
+
     console.log "final collect params --> "
     console.log param
 
@@ -56,15 +57,15 @@ class TRM
     #get adgroup from url
     search = qs.parse(location.search.replace("?", "")) || null
     if search && search[@.KEYS.PARAM_ADGROUP]
-      # console.log "search -- "
-      # console.log search[@.KEYS.PARAM_ADGROUP]
       return search[@.KEYS.PARAM_ADGROUP]
 
-    # console.log "not find aid"
     search = qs.parse(document.referrer)
     aid = search[@.KEYS.PARAM_ADGROUP] || cookie.get(@.KEYS.ADGROUP) || null
-    # console.log "aid --"
-    # console.log aid
+
+    if aid isnt null or aid isnt ""
+      @._setCookie @.KEYS.ADGROUP, aid
+
+    console.log "aid -- #{aid}"
     return aid
 
   #get uuid from cookie, or generate a new uid
@@ -76,14 +77,6 @@ class TRM
       # console.log "create a uuid, #{uid}"
       @._setCookie(@.KEYS.ID, uid, true)
     return uid
-
-  _initCookie: () ->
-    times = parseInt(cookie.get('times'), 10) || 0
-    if times
-      @._setCookie("times", times + 1)
-    @._setCookie("times", times + 1)
-    return @
-    # cookie.set('times', times + 1, { expires: new Date(300) })
 
   # set cookie and set it is forever or expreis
   # the expires setting is depend on KEYS
@@ -108,18 +101,14 @@ class TRM
     @.params = @._prepareData()
     try
       request {
-        method: "POST"
-        url: "#{@.host}#{path}"
-        form: @.params
-        # qs: {
-        #   id: @.id
-        # }
+          method: "POST"
+          url: "#{@.host}#{path}"
+          body: JSON.stringify(@.params)
       }, (er, res) ->
         if !er
           return console.log('browser-request got your root path:\n' + res.body)
 
         return console.log('There was an error, but at least browser-request loaded and ran!')
-
     catch error
       return console.log("send request, error happen")
 
@@ -148,3 +137,4 @@ global = window || module.exports
 global.analytics = global.analytics || []
 global.analytics = new TRM()
 global.analytics.host = "http://localhost:1337/track"
+# global.analytics.host = "http://localhost:3000/"
