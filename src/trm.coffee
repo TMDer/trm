@@ -56,13 +56,20 @@ class TRM
   _getAdGroupId: () ->
     #get adgroup from url
     search = qs.parse(location.search.replace("?", "")) || null
-    if search && search[@.KEYS.PARAM_ADGROUP]
-      return search[@.KEYS.PARAM_ADGROUP]
+    console.log search
+    console.log search[@.KEYS.PARAM_ADGROUP]
+    qsFromUrl = search[@.KEYS.PARAM_ADGROUP] || ""
+    if qsFromUrl.length > 0
+      # alert(search[@.KEYS.PARAM_ADGROUP])
+      @._setCookie @.KEYS.ADGROUP, qsFromUrl
+      return qsFromUrl
 
     search = qs.parse(document.referrer)
-    aid = search[@.KEYS.PARAM_ADGROUP] || cookie.get(@.KEYS.ADGROUP) || null
+    aid = cookie.get(@.KEYS.ADGROUP) || null
+
 
     if aid isnt null or aid isnt ""
+      console.log "get aid #{aid}"
       @._setCookie @.KEYS.ADGROUP, aid
 
     console.log "aid -- #{aid}"
@@ -87,7 +94,7 @@ class TRM
     else
       newDate.setHours(newDate.getHours() + @.KEYS.EXPIRES)
 
-    cookie.set(key, data, { expires: newDate })
+    cookie.set(key, data, { expires: newDate, path: "/" })
     return @
 
   host: (host) ->
