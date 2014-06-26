@@ -17,6 +17,7 @@ class TRM
     @.host = "http://localhost:1337/track"
     # @.host = "http://localhost:3000/"
     @.params = {}
+    @.subParams = {}
     @.KEYS = {
       ID: "pmd.uuid"
       ADGROUP: "pmd.adGroupId"
@@ -106,6 +107,11 @@ class TRM
   send: (path) ->
     # request 'https://api.github.com/users/octocat/orgs', (er, res) ->
     @.params = @._prepareData()
+    if @.subParams
+      @.params.params = @.subParams
+
+    console.log "send data"
+    console.log @.params
     try
       request {
           method: "POST"
@@ -126,12 +132,12 @@ class TRM
     if typeof key is "object"
       items = key
       items.forEach (val, key) ->
-        @.params[key] = val
-        # @.params.push {key: val}
+        @.subParams[key] = val
+        # @.subParams.push {key: val}
       return @
 
     if key
-      @.params[key] = value
+      @.subParams[key] = value
       return
 
     # @._call key, value
