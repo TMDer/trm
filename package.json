@@ -7,6 +7,7 @@
     "test": "test"
   },
   "scripts": {
+    "build": "coffee ./src/import.coffee",
     "compile": "grunt compile",
     "watch": "grunt watch",
     "start": "noder"
@@ -15,7 +16,8 @@
     "browser-request": "~0.3.1",
     "noder": "0.0.10",
     "cookie-cutter": "~0.1.1",
-    "node-uuid": "~1.4.1"
+    "node-uuid": "~1.4.1",
+    "uglify-js": "~2.4.14"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
