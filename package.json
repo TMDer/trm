@@ -6,7 +6,8 @@
   "scripts": {
     "compile": "grunt compile",
     "watch": "grunt watch",
-    "start": "noder"
+    "start": "noder",
+    "test": "mocha ./test"
   },
   "dependencies": {
     "browser-request": "~0.3.1",
@@ -24,10 +25,8 @@
     "grunt-mocha-test": "~0.9.0",
     "mocha": "*",
     "chai": "~1.9.1",
-    "should": "~4.0.4"
-  },
-  "test": {
-    "test": "mocha ./test"
+    "should": "~4.0.4",
+    "coffee-script": "~1.7.1"
   },
   "author": "clonn",
   "license": "MIT"
