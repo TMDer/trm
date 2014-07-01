@@ -23,5 +23,5 @@
         if (event) event();
         return callback();
       };
-  }, window.analytics.SNIPPET_VERSION = "2.0.9";
+  }, window.analytics.VERSION = "{VERSION}";
 })();

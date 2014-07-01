@@ -1,29 +1,30 @@
 UglifyJS = require("uglify-js")
 fs = require("fs")
 path = require("path")
-config = process.LIB || "localhost:1337/lib/trm.compile.js"
+optUrl = process.LIB || "localhost:1337/lib/trm.compile.js"
 
+module.exports = exports = {
+  DEBUG: false
+  config: (opt) ->
+    if typeof opt isnt "string"
+      return throw "optUrl should be a string type"
+    @optUrl = optUrl = opt
+    console.log @.optUrl
+    return @
 
-cfg = (cfg) ->
-  if typeof cfg isnt "string"
-    return throw "config should be a string type"
-  config = cfg
-  return @
+  optUrl: optUrl
 
-compress = (filepath, opt) ->
-  filepath = filepath || path.join(__dirname, "../usage/index.js")
-  config = opt || config
+  compress: (filepath, opt) ->
+    filepath = filepath || path.join(__dirname, "../usage/index.js")
+    optUrl = opt || optUrl
 
-  file = fs.readFileSync filepath, "utf8"
-  file = file.replace("{ENV_PATH}", config)
-  code = file
-  result = UglifyJS.minify(code, { fromString: true})
-  console.log result.code
-  return result
-
-module.exports = {
-  config: cfg
-  compress: compress
+    file = fs.readFileSync filepath, "utf8"
+    file = file.replace("{ENV_PATH}", optUrl)
+    file = file.replace("{VERSION}", require("../package.json").version)
+    code = file
+    result = UglifyJS.minify(code, { fromString: true})
+    if @DEBUG
+      console.log result.code
+    return result
 }
-
-compress()
+# compress()

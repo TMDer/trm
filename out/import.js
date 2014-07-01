@@ -1,4 +1,4 @@
-var UglifyJS, cfg, compress, config, fs, path;
+var UglifyJS, exports, fs, optUrl, path;
 
 UglifyJS = require("uglify-js");
 
@@ -6,33 +6,33 @@ fs = require("fs");
 
 path = require("path");
 
-config = process.LIB || "localhost:1337/lib/trm.compile.js";
+optUrl = process.LIB || "localhost:1337/lib/trm.compile.js";
 
-cfg = function(cfg) {
-  if (typeof cfg !== "string") {
-    throw "config should be a string type";
+module.exports = exports = {
+  DEBUG: false,
+  config: function(opt) {
+    if (typeof opt !== "string") {
+      throw "optUrl should be a string type";
+    }
+    this.optUrl = optUrl = opt;
+    console.log(this.optUrl);
+    return this;
+  },
+  optUrl: optUrl,
+  compress: function(filepath, opt) {
+    var code, file, result;
+    filepath = filepath || path.join(__dirname, "../usage/index.js");
+    optUrl = opt || optUrl;
+    file = fs.readFileSync(filepath, "utf8");
+    file = file.replace("{ENV_PATH}", optUrl);
+    file = file.replace("{VERSION}", require("../package.json").version);
+    code = file;
+    result = UglifyJS.minify(code, {
+      fromString: true
+    });
+    if (this.DEBUG) {
+      console.log(result.code);
+    }
+    return result;
   }
-  config = cfg;
-  return this;
 };
-
-compress = function(filepath, opt) {
-  var code, file, result;
-  filepath = filepath || path.join(__dirname, "../usage/index.js");
-  config = opt || config;
-  file = fs.readFileSync(filepath, "utf8");
-  file = file.replace("{ENV_PATH}", config);
-  code = file;
-  result = UglifyJS.minify(code, {
-    fromString: true
-  });
-  console.log(result.code);
-  return result;
-};
-
-module.exports = {
-  config: cfg,
-  compress: compress
-};
-
-compress();
