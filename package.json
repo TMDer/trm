@@ -1,13 +1,9 @@
 {
   "name": "trm",
-  "version": "0.0.2",
+  "version": "0.0.21",
   "description": "tracking management client code",
-  "main": "node out/import.js",
-  "directories": {
-    "test": "test"
-  },
+  "main": "./out/import.js",
   "scripts": {
-    "build": "coffee ./src/import.coffee",
     "compile": "grunt compile",
     "watch": "grunt watch",
     "start": "noder"
