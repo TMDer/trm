@@ -1,0 +1,4 @@
+-t 5000
+--compilers coffee:coffee-script/register
+--require should
+--reporter Spec

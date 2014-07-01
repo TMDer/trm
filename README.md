@@ -1,5 +1,7 @@
 #TRM
 
+[![Build Status](https://travis-ci.org/clonn/trm.svg?branch=master)](https://travis-ci.org/clonn/trm)
+
 Tracking management client javascript code
 
 ##usage
