@@ -35,8 +35,17 @@ module.exports = exports = {
     file = fs.readFileSync filepath, "utf8"
     file = file.replace(/{DOMAIN_NAME}/g, domain)
 
+    if (destPath)
+      # destPath = path.join(__dirname , "node_modules/trm/out", "./trm.js")
+      console.log destPath
+      console.log "save file of: @{destPath}"
+      @.saveFile(destPath, file)
+
     console.log file
     return file
+
+  saveFile: (destPath, content) ->
+    return fs.writeFileSync(destPath, content)
 
 }
 # compress()

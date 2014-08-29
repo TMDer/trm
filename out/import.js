@@ -41,7 +41,15 @@ module.exports = exports = {
     filepath = srcPath || path.join(__dirname, "./trm.js");
     file = fs.readFileSync(filepath, "utf8");
     file = file.replace(/{DOMAIN_NAME}/g, domain);
+    if (destPath) {
+      console.log(destPath);
+      console.log("save file of: @{destPath}");
+      this.saveFile(destPath, file);
+    }
     console.log(file);
     return file;
+  },
+  saveFile: function(destPath, content) {
+    return fs.writeFileSync(destPath, content);
   }
 };

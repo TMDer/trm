@@ -27,6 +27,7 @@ describe "tracking system test", (done) ->
 
     result = trm.generateLib({
       domain: "yahoo.com.tw"
+      destPath: "./tmp/test.js"
     })
     result.should.should.match(/yahoo.com.tw/)
     # result.code.should.should.match(regexp)
