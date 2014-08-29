@@ -22,3 +22,10 @@ describe "tracking system test", (done) ->
     regexp = new RegExp(version)
     result.code.should.should.match(regexp)
     done()
+
+  it.only "generate library file", (done) ->
+
+    result = trm.generateLib("yahoo.com.tw")
+    # regexp = new RegExp(version)
+    # result.code.should.should.match(regexp)
+    done()

@@ -16,7 +16,7 @@ uuid = require('node-uuid');
 
 TRM = (function() {
   function TRM() {
-    this.host = "http://localhost:1337/track";
+    this.host = "{{DOMAIN_NAME}}/track";
     this.params = {};
     this.subParams = {};
     this.KEYS = {
@@ -160,4 +160,4 @@ global.analytics = global.analytics || [];
 
 global.analytics = new TRM();
 
-global.analytics.host = "http://localhost:1337/track";
+global.analytics.host = "{DOMAIN_NAME}/track";

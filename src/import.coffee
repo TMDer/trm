@@ -26,5 +26,14 @@ module.exports = exports = {
     if @DEBUG
       console.log result.code
     return result
+
+  generateLib: (domain, srcPath, destPath) ->
+
+    filepath = srcPath || path.join(__dirname, "./trm.js")
+
+    file = fs.readFileSync filepath, "utf8"
+    file = file.replace(/{DOMAIN_NAME}/g, domain)
+    console.log file
+
 }
 # compress()

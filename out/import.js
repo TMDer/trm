@@ -34,5 +34,12 @@ module.exports = exports = {
       console.log(result.code);
     }
     return result;
+  },
+  generateLib: function(domain, srcPath, destPath) {
+    var file, filepath;
+    filepath = srcPath || path.join(__dirname, "./trm.js");
+    file = fs.readFileSync(filepath, "utf8");
+    file = file.replace(/{DOMAIN_NAME}/g, domain);
+    return console.log(file);
   }
 };

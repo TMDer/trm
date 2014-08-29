@@ -14,7 +14,7 @@ uuid = require('node-uuid')
 
 class TRM
   constructor: () ->
-    @.host = "http://localhost:1337/track"
+    @.host = "{{DOMAIN_NAME}}/track"
     # @.host = "http://localhost:3000/"
     @.params = {}
     @.subParams = {}
@@ -149,5 +149,6 @@ class TRM
 global = window || module.exports
 global.analytics = global.analytics || []
 global.analytics = new TRM()
-global.analytics.host = "http://localhost:1337/track"
+# global.analytics.host = "http://localhost:1337/track"
+global.analytics.host = "{DOMAIN_NAME}/track"
 # global.analytics.host = "http://localhost:3000/"
