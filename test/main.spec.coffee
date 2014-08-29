@@ -25,7 +25,9 @@ describe "tracking system test", (done) ->
 
   it.only "generate library file", (done) ->
 
-    result = trm.generateLib("yahoo.com.tw")
-    # regexp = new RegExp(version)
+    result = trm.generateLib({
+      domain: "yahoo.com.tw"
+    })
+    result.should.should.match(/yahoo.com.tw/)
     # result.code.should.should.match(regexp)
     done()
