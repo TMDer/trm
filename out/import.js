@@ -43,10 +43,9 @@ module.exports = exports = {
     file = file.replace(/{DOMAIN_NAME}/g, domain);
     if (destPath) {
       console.log(destPath);
-      console.log("save file of: @{destPath}");
+      console.log("save file of: " + destPath);
       this.saveFile(destPath, file);
     }
-    console.log(file);
     return file;
   },
   saveFile: function(destPath, content) {
