@@ -37,7 +37,7 @@ module.exports = exports = {
 
     if (destPath)
       # destPath = path.join(__dirname , "node_modules/trm/out", "./trm.js")
-      console.log destPath
+      # console.log destPath
       console.log "save file of: #{destPath}"
       @.saveFile(destPath, file)
 

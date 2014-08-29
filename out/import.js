@@ -42,7 +42,6 @@ module.exports = exports = {
     file = fs.readFileSync(filepath, "utf8");
     file = file.replace(/{DOMAIN_NAME}/g, domain);
     if (destPath) {
-      console.log(destPath);
       console.log("save file of: " + destPath);
       this.saveFile(destPath, file);
     }
