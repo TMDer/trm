@@ -14,7 +14,7 @@ uuid = require('node-uuid')
 
 class TRM
   constructor: () ->
-    @.host = "{{DOMAIN_NAME}}/track"
+    @.host = "{DOMAIN_NAME}/track"
     # @.host = "http://localhost:3000/"
     @.params = {}
     @.subParams = {}
