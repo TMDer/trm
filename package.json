@@ -1,6 +1,6 @@
 {
   "name": "trm",
-  "version": "0.0.24",
+  "version": "0.0.25",
   "description": "tracking management client code",
   "main": "./out/import.js",
   "scripts": {
