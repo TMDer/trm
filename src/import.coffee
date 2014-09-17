@@ -3,6 +3,10 @@ fs = require("fs")
 path = require("path")
 optUrl = process.LIB || "localhost:1337/lib/trm.compile.js"
 
+Promise = require("bluebird")
+browserify = require('browserify')
+b = browserify()
+
 module.exports = exports = {
   DEBUG: false
   config: (opt) ->
@@ -28,21 +32,24 @@ module.exports = exports = {
     return result
 
   generateLib: (config) ->
+    self = @
     {domain, destPath, srcPath} = config
-
     filepath = srcPath || path.join(__dirname, "./trm.js")
 
-    file = fs.readFileSync filepath, "utf8"
-    file = file.replace(/{DOMAIN_NAME}/g, domain)
+    # will return a promise module
+    return new Promise (resolve, reject) ->
+      b.add(filepath)
+      b.bundle (err, src) ->
+        return reject(err) if err
 
-    if (destPath)
-      # destPath = path.join(__dirname , "node_modules/trm/out", "./trm.js")
-      # console.log destPath
-      console.log "save file of: #{destPath}"
-      @.saveFile(destPath, file)
+        file = src.toString()
+        file = file.replace(/{DOMAIN_NAME}/g, domain)
 
-    # console.log file
-    return file
+        if (destPath)
+          self.saveFile(destPath, file)
+
+        resolve(file)
+
 
   saveFile: (destPath, content) ->
     return fs.writeFileSync(destPath, content)

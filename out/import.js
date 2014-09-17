@@ -1,4 +1,4 @@
-var UglifyJS, exports, fs, optUrl, path;
+var Promise, UglifyJS, b, browserify, exports, fs, optUrl, path;
 
 UglifyJS = require("uglify-js");
 
@@ -7,6 +7,12 @@ fs = require("fs");
 path = require("path");
 
 optUrl = process.LIB || "localhost:1337/lib/trm.compile.js";
+
+Promise = require("bluebird");
+
+browserify = require('browserify');
+
+b = browserify();
 
 module.exports = exports = {
   DEBUG: false,
@@ -36,16 +42,25 @@ module.exports = exports = {
     return result;
   },
   generateLib: function(config) {
-    var destPath, domain, file, filepath, srcPath;
+    var destPath, domain, filepath, self, srcPath;
+    self = this;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath;
     filepath = srcPath || path.join(__dirname, "./trm.js");
-    file = fs.readFileSync(filepath, "utf8");
-    file = file.replace(/{DOMAIN_NAME}/g, domain);
-    if (destPath) {
-      console.log("save file of: " + destPath);
-      this.saveFile(destPath, file);
-    }
-    return file;
+    return new Promise(function(resolve, reject) {
+      b.add(filepath);
+      return b.bundle(function(err, src) {
+        var file;
+        if (err) {
+          return reject(err);
+        }
+        file = src.toString();
+        file = file.replace(/{DOMAIN_NAME}/g, domain);
+        if (destPath) {
+          self.saveFile(destPath, file);
+        }
+        return resolve(file);
+      });
+    });
   },
   saveFile: function(destPath, content) {
     return fs.writeFileSync(destPath, content);
