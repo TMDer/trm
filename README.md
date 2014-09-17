@@ -9,6 +9,19 @@ Tracking management client javascript code
     git clone https://github.com/clonn/trm.git && cd trm
     ./make.sh
 
+## Generate library
+
+    trm = require("trm")
+    result = trm.generateLib({
+      domain: "yahoo.com.tw",
+      destPath: "./tmp/test.js"
+    })
+
+    result.then(function (result) {
+      // show file content and save data in destination path
+      console.log(result);
+    })
+
 ##Tracking library
 
     wget https://raw.githubusercontent.com/clonn/trm/master/lib/trm.compile.js
