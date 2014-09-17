@@ -23,12 +23,13 @@ describe "tracking system test", (done) ->
     result.code.should.should.match(regexp)
     done()
 
-  it.only "generate library file", (done) ->
+  it "generate library file", (done) ->
 
-    result = trm.generateLib({
+    result = trm.generateLib {
       domain: "yahoo.com.tw"
       destPath: "./tmp/test.js"
-    })
-    result.should.should.match(/yahoo.com.tw/)
-    # result.code.should.should.match(regexp)
-    done()
+    }
+
+    result.then (data) ->
+      data.should.be.type('string')
+      done()
