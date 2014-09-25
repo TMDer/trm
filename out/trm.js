@@ -22,9 +22,9 @@ TRM = (function() {
     this.KEYS = {
       ID: "pmd.uuid",
       ADGROUP: "pmd.adGroupId",
-      PARAM_ADGROUP: "adgroup",
+      PARAM_ADGROUP: "adgroupid",
       TRACKPIXEL: "pmd.trackPixelId",
-      EXPIRES: 3,
+      EXPIRES: 7,
       FOREVER: 9999999999
     };
     return this;
@@ -47,28 +47,22 @@ TRM = (function() {
       referer: document.referrer || "",
       id: uuid
     };
-    console.log("final collect params --> ");
-    console.log(param);
+    if (console) {
+      console.log("final collect params --> ");
+      console.log(param);
+    }
     return param;
   };
 
   TRM.prototype._getAdGroupId = function() {
     var aid, qsFromUrl, search;
-    search = qs.parse(location.search.replace("?", "")) || null;
-    console.log(search);
-    console.log(search[this.KEYS.PARAM_ADGROUP]);
+    search = qs.parse(location.search.toLowerCase().replace("?", "")) || null;
     qsFromUrl = search[this.KEYS.PARAM_ADGROUP] || "";
     if (qsFromUrl.length > 0) {
       this._setCookie(this.KEYS.ADGROUP, qsFromUrl);
       return qsFromUrl;
     }
-    search = qs.parse(document.referrer);
     aid = cookie.get(this.KEYS.ADGROUP) || null;
-    if (aid !== null || aid !== "") {
-      console.log("get aid " + aid);
-      this._setCookie(this.KEYS.ADGROUP, aid);
-    }
-    console.log("aid -- " + aid);
     return aid;
   };
 
@@ -88,7 +82,7 @@ TRM = (function() {
     if (forever) {
       newDate.setHours(newDate.getHours() + this.KEYS.FOREVER);
     } else {
-      newDate.setHours(newDate.getHours() + this.KEYS.EXPIRES);
+      newDate.setDate(newDate.getDate() + this.KEYS.EXPIRES);
     }
     cookie.set(key, data, {
       expires: newDate,
@@ -111,8 +105,6 @@ TRM = (function() {
     if (this.subParams) {
       this.params.params = this.subParams;
     }
-    console.log("send data");
-    console.log(this.params);
     try {
       return request({
         method: "POST",
@@ -120,7 +112,7 @@ TRM = (function() {
         body: JSON.stringify(this.params)
       }, function(er, res) {
         if (!er) {
-          return console.log('browser-request got your root path:\n' + res.body);
+          return;
         }
         return console.log('There was an error, but at least browser-request loaded and ran!');
       });
@@ -146,9 +138,7 @@ TRM = (function() {
     return this;
   };
 
-  TRM.prototype._call = function(key, value) {
-    return console.log("key, " + key + ", value " + value);
-  };
+  TRM.prototype._call = function(key, value) {};
 
   return TRM;
 

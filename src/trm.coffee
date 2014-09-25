@@ -15,15 +15,14 @@ uuid = require('node-uuid')
 class TRM
   constructor: () ->
     @.host = "{DOMAIN_NAME}/track"
-    # @.host = "http://localhost:3000/"
     @.params = {}
     @.subParams = {}
     @.KEYS = {
       ID: "pmd.uuid"
       ADGROUP: "pmd.adGroupId"
-      PARAM_ADGROUP: "adgroup"
+      PARAM_ADGROUP: "adgroupid"
       TRACKPIXEL: "pmd.trackPixelId"
-      EXPIRES: 3
+      EXPIRES: 7
       FOREVER: 9999999999
     }
 
@@ -49,32 +48,35 @@ class TRM
       id: uuid
     }
 
-    console.log "final collect params --> "
-    console.log param
+    if console
+      console.log "final collect params --> "
+      console.log param
 
     return param
 
   _getAdGroupId: () ->
     #get adgroup from url
-    search = qs.parse(location.search.replace("?", "")) || null
-    console.log search
-    console.log search[@.KEYS.PARAM_ADGROUP]
+    search = qs.parse(location.search.toLowerCase().replace("?", "")) || null
     qsFromUrl = search[@.KEYS.PARAM_ADGROUP] || ""
+
     if qsFromUrl.length > 0
-      # alert(search[@.KEYS.PARAM_ADGROUP])
       @._setCookie @.KEYS.ADGROUP, qsFromUrl
       return qsFromUrl
 
-    search = qs.parse(document.referrer)
     aid = cookie.get(@.KEYS.ADGROUP) || null
-
-
-    if aid isnt null or aid isnt ""
-      console.log "get aid #{aid}"
-      @._setCookie @.KEYS.ADGROUP, aid
-
-    console.log "aid -- #{aid}"
     return aid
+    # if aid is null
+    #   return
+    #
+    # if aid is ""
+    #   return
+    #
+    # if isNaN(aid)
+    #   return
+
+    # aid = @._setCookie @.KEYS.ADGROUP, aid
+
+    # return aid
 
   #get uuid from cookie, or generate a new uid
   _getTrmUuid: () ->
@@ -82,7 +84,6 @@ class TRM
     # create a uid
     unless uid
       uid = uuid.v4()
-      # console.log "create a uuid, #{uid}"
       @._setCookie(@.KEYS.ID, uid, true)
     return uid
 
@@ -90,10 +91,11 @@ class TRM
   # the expires setting is depend on KEYS
   _setCookie: (key, data, forever) ->
     newDate = new Date()
+
     if forever
       newDate.setHours(newDate.getHours() + @.KEYS.FOREVER)
     else
-      newDate.setHours(newDate.getHours() + @.KEYS.EXPIRES)
+      newDate.setDate(newDate.getDate() + @.KEYS.EXPIRES)
 
     cookie.set(key, data, { expires: newDate, path: "/" })
     return @
@@ -110,8 +112,6 @@ class TRM
     if @.subParams
       @.params.params = @.subParams
 
-    console.log "send data"
-    console.log @.params
     try
       request {
           method: "POST"
@@ -119,7 +119,8 @@ class TRM
           body: JSON.stringify(@.params)
       }, (er, res) ->
         if !er
-          return console.log('browser-request got your root path:\n' + res.body)
+          return
+          # return console.log('browser-request got your root path:\n' + res.body)
 
         return console.log('There was an error, but at least browser-request loaded and ran!')
     catch error
@@ -127,8 +128,6 @@ class TRM
 
   push: (key, value) ->
 
-    # console.log key
-    # console.log typeof key
     if typeof key is "object"
       items = key
       items.forEach (val, key) ->
@@ -144,11 +143,9 @@ class TRM
     return @
 
   _call: (key, value) ->
-    console.log "key, #{key}, value #{value}"
+    return
 
 global = window || module.exports
 global.analytics = global.analytics || []
 global.analytics = new TRM()
-# global.analytics.host = "http://localhost:1337/track"
 global.analytics.host = "{DOMAIN_NAME}/track"
-# global.analytics.host = "http://localhost:3000/"
