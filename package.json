@@ -1,6 +1,6 @@
 {
   "name": "trm",
-  "version": "0.0.28",
+  "version": "0.0.29",
   "description": "tracking management client code",
   "main": "./out/import.js",
   "scripts": {
@@ -31,5 +31,16 @@
     "coffee-script": "~1.7.1"
   },
   "author": "clonn",
-  "license": "MIT"
+  "license": "MIT",
+  "directories": {
+    "test": "test"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git://github.com/TMDer/trm.git"
+  },
+  "bugs": {
+    "url": "https://github.com/TMDer/trm/issues"
+  },
+  "homepage": "https://github.com/TMDer/trm"
 }
