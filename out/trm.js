@@ -109,7 +109,7 @@ TRM = (function() {
       this.params.params = this.subParams;
     }
     try {
-      return request({
+      request({
         method: "POST",
         url: "" + this.host + path,
         body: JSON.stringify(this.params)
@@ -123,6 +123,7 @@ TRM = (function() {
       error = _error;
       return console.log("send request, error happen");
     }
+    return this.sendAudience();
   };
 
   TRM.prototype.sendAudience = function(aid) {

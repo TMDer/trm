@@ -129,6 +129,8 @@ class TRM
     catch error
       return console.log("send request, error happen")
 
+    @sendAudience()
+
   sendAudience: (aid) ->
 
     if (window.document.getElementById(@.KEYS.AUDIENCETAGID))

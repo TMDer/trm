@@ -34,11 +34,9 @@
             a.type = "text/javascript", a.id = "analytics-js", a.async = !0, a.src = ("https:" === document.location.protocol ? "https://" : "http://") + trmHost;
             var n = document.getElementsByTagName("script")[0];
             n.parentNode.insertBefore(a, n);
-            console.log(n);
         }
 
         var event = window.onload;
-        console.log(event)
         window.onload = function () {
           if (event) event();
           return callback();
@@ -47,9 +45,6 @@
 
     window.analytics.load(function () {
       window.analytics.initial("1", "43243243432");
-      window.analytics.sendAudience();
-      window.analytics.sendAudience();
-      window.analytics.sendAudience();
       window.analytics.push("id", "abc");
       window.analytics.push("NTD", "168");
       window.analytics.send("");
