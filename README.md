@@ -7,7 +7,7 @@ Tracking management client javascript code
 ##usage
 
     git clone https://github.com/clonn/trm.git && cd trm
-    ./make.sh
+    npm start
 
 ## Generate library
 
