@@ -25,6 +25,7 @@ class TRM
       TRACKPIXEL: "pmd.trackPixelId"
       EXPIRES: 7
       FOREVER: 9999999999
+      AUDIENCETAGID: "pmd-tag-aid"
     }
 
     return @
@@ -130,19 +131,19 @@ class TRM
 
   sendAudience: (aid) ->
 
+    if (window.document.getElementById(@.KEYS.AUDIENCETAGID))
+      return
+
     aid = aid || @.aid
 
     unless aid
       return console.log("Aid is not found")
 
-
-    console.log "send feedback to aid >>>>"
-
+    img = new Image(1,1)
+    window.document.body.appendChild(img)
     src = @.audienceHost.replace("{AID}", aid)
-
-    img= new Image(1,1)
-    img.src= src
-    return
+    img.src = src
+    return img
 
   push: (key, value) ->
 

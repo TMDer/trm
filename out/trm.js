@@ -26,7 +26,8 @@ TRM = (function() {
       PARAM_ADGROUP: "adgroupid",
       TRACKPIXEL: "pmd.trackPixelId",
       EXPIRES: 7,
-      FOREVER: 9999999999
+      FOREVER: 9999999999,
+      AUDIENCETAGID: "pmd-tag-aid"
     };
     return this;
   }
@@ -126,14 +127,18 @@ TRM = (function() {
 
   TRM.prototype.sendAudience = function(aid) {
     var img, src;
+    if (window.document.getElementById(this.KEYS.AUDIENCETAGID)) {
+      return;
+    }
     aid = aid || this.aid;
     if (!aid) {
       return console.log("Aid is not found");
     }
-    console.log("send feedback to aid >>>>");
-    src = this.audienceHost.replace("{AID}", aid);
     img = new Image(1, 1);
+    window.document.body.appendChild(img);
+    src = this.audienceHost.replace("{AID}", aid);
     img.src = src;
+    return img;
   };
 
   TRM.prototype.push = function(key, value) {
