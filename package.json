@@ -1,12 +1,12 @@
 {
   "name": "trm",
-  "version": "0.0.29",
+  "version": "0.1.0",
   "description": "tracking management client code",
   "main": "./out/import.js",
   "scripts": {
     "compile": "grunt compile",
     "watch": "grunt watch",
-    "start": "noder",
+    "start": "./make.sh",
     "test": "mocha ./test"
   },
   "dependencies": {
