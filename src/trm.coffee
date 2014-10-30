@@ -15,6 +15,7 @@ uuid = require('node-uuid')
 class TRM
   constructor: () ->
     @.host = "{DOMAIN_NAME}/track"
+    @.audienceHost = "https://www.facebook.com/tr?id={AID}&amp;ev=PixelInitialized"
     @.params = {}
     @.subParams = {}
     @.KEYS = {
@@ -103,8 +104,9 @@ class TRM
   host: (host) ->
     @.host = host
 
-  initial: (id) ->
+  initial: (id, aid) ->
     @.id = id
+    @.aid = aid
 
   send: (path) ->
     # request 'https://api.github.com/users/octocat/orgs', (er, res) ->
@@ -125,6 +127,22 @@ class TRM
         return console.log('There was an error, but at least browser-request loaded and ran!')
     catch error
       return console.log("send request, error happen")
+
+  sendAudience: (aid) ->
+
+    aid = aid || @.aid
+
+    unless aid
+      return console.log("Aid is not found")
+
+
+    console.log "send feedback to aid >>>>"
+
+    src = @.audienceHost.replace("{AID}", aid)
+
+    img= new Image(1,1)
+    img.src= src
+    return
 
   push: (key, value) ->
 

@@ -17,6 +17,7 @@ uuid = require('node-uuid');
 TRM = (function() {
   function TRM() {
     this.host = "{DOMAIN_NAME}/track";
+    this.audienceHost = "https://www.facebook.com/tr?id={AID}&amp;ev=PixelInitialized";
     this.params = {};
     this.subParams = {};
     this.KEYS = {
@@ -95,8 +96,9 @@ TRM = (function() {
     return this.host = host;
   };
 
-  TRM.prototype.initial = function(id) {
-    return this.id = id;
+  TRM.prototype.initial = function(id, aid) {
+    this.id = id;
+    return this.aid = aid;
   };
 
   TRM.prototype.send = function(path) {
@@ -120,6 +122,18 @@ TRM = (function() {
       error = _error;
       return console.log("send request, error happen");
     }
+  };
+
+  TRM.prototype.sendAudience = function(aid) {
+    var img, src;
+    aid = aid || this.aid;
+    if (!aid) {
+      return console.log("Aid is not found");
+    }
+    console.log("send feedback to aid >>>>");
+    src = this.audienceHost.replace("{AID}", aid);
+    img = new Image(1, 1);
+    img.src = src;
   };
 
   TRM.prototype.push = function(key, value) {
