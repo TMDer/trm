@@ -145,6 +145,7 @@ class TRM
     window.document.body.appendChild(img)
     src = @.audienceHost.replace("{AID}", aid)
     img.src = src
+    img.attributes.style.display = "none"
     return img
 
   push: (key, value) ->
@@ -170,3 +171,5 @@ global = window || module.exports
 global.analytics = global.analytics || []
 global.analytics = new TRM()
 global.analytics.host = "{DOMAIN_NAME}/track"
+global.console?.log = (msg) ->
+  return msg
