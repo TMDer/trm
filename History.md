@@ -1,6 +1,6 @@
 # Revision history for shipitjs
 
-0.1.2 / 2015-01-07
+0.1.3 / 2015-01-07
 ==================
 
  * fixed image style set to display none.
