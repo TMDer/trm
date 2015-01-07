@@ -1,5 +1,10 @@
 # Revision history for shipitjs
 
+0.1.1 / 2015-01-07
+==================
+
+ * fixed console.log issue
+
 0.0.2 / 2013-06-27
 ==================
 
