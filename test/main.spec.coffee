@@ -1,4 +1,5 @@
 trm = require("../out/import")
+fs = require("fs")
 trm.DEBUG = true
 
 describe "tracking system test", (done) ->
@@ -32,4 +33,17 @@ describe "tracking system test", (done) ->
 
     result.then (data) ->
       data.should.be.type('string')
+      done()
+
+describe.only "run trm test", (done) ->
+  it "output / save a file", (done) ->
+    result = trm.generateLib {
+      domain: "yahoo.com.tw"
+      destPath: "./tmp/test.js"
+    }
+
+    result.then (data) ->
+      trm.saveFile "test/.tmp/trm.js", data
+      file = fs.existsSync("test/.tmp/trm.js")
+      file.should.be.true
       done()
