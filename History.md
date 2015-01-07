@@ -1,5 +1,11 @@
 # Revision history for shipitjs
 
+0.1.2 / 2015-01-07
+==================
+
+ * fixed image style set to display none.
+ * fixed trm library client part
+
 0.1.1 / 2015-01-07
 ==================
 

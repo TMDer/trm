@@ -145,7 +145,7 @@ class TRM
     window.document.body.appendChild(img)
     src = @.audienceHost.replace("{AID}", aid)
     img.src = src
-    img.attributes.style.display = "none"
+    img.style?.display = "none"
     return img
 
   push: (key, value) ->

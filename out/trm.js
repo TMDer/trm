@@ -127,7 +127,7 @@ TRM = (function() {
   };
 
   TRM.prototype.sendAudience = function(aid) {
-    var img, src;
+    var img, src, _ref;
     if (window.document.getElementById(this.KEYS.AUDIENCETAGID)) {
       return;
     }
@@ -139,7 +139,9 @@ TRM = (function() {
     window.document.body.appendChild(img);
     src = this.audienceHost.replace("{AID}", aid);
     img.src = src;
-    img.attributes.style.display = "none";
+    if ((_ref = img.style) != null) {
+      _ref.display = "none";
+    }
     return img;
   };
 
