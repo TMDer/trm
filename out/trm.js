@@ -2,7 +2,7 @@
 # record, user data
 */
 
-var TRM, cookie, global, qs, request, url, uuid;
+var TRM, cookie, global, qs, request, url, uuid, _ref;
 
 request = require('browser-request');
 
@@ -139,6 +139,7 @@ TRM = (function() {
     window.document.body.appendChild(img);
     src = this.audienceHost.replace("{AID}", aid);
     img.src = src;
+    img.attributes.style.display = "none";
     return img;
   };
 
@@ -171,3 +172,9 @@ global.analytics = global.analytics || [];
 global.analytics = new TRM();
 
 global.analytics.host = "{DOMAIN_NAME}/track";
+
+if ((_ref = global.console) != null) {
+  _ref.log = function(msg) {
+    return msg;
+  };
+}
