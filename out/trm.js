@@ -2,7 +2,7 @@
 # record, user data
 */
 
-var TRM, cookie, global, qs, request, url, uuid, _ref;
+var TRM, cookie, global, qs, request, url, uuid;
 
 request = require('browser-request');
 
@@ -102,6 +102,13 @@ TRM = (function() {
     return this.aid = aid;
   };
 
+  TRM.prototype._protocal = function(url) {
+    if (window.location.protocol === "https://") {
+      return url.replace("http://", "https://");
+    }
+    return url.replace("https://", "http://");
+  };
+
   TRM.prototype.send = function(path) {
     var error;
     this.params = this._prepareData();
@@ -175,8 +182,8 @@ global.analytics = new TRM();
 
 global.analytics.host = "{DOMAIN_NAME}/track";
 
-if ((_ref = global.console) != null) {
-  _ref.log = function(msg) {
+global.console = global.console || {
+  log: function(msg) {
     return msg;
-  };
-}
+  }
+};
