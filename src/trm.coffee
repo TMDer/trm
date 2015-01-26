@@ -67,18 +67,6 @@ class TRM
 
     aid = cookie.get(@.KEYS.ADGROUP) || null
     return aid
-    # if aid is null
-    #   return
-    #
-    # if aid is ""
-    #   return
-    #
-    # if isNaN(aid)
-    #   return
-
-    # aid = @._setCookie @.KEYS.ADGROUP, aid
-
-    # return aid
 
   #get uuid from cookie, or generate a new uid
   _getTrmUuid: () ->
@@ -109,8 +97,13 @@ class TRM
     @.id = id
     @.aid = aid
 
+  _protocal: (url) ->
+    if window.location.protocol is "https://"
+      return url.replace("http://", "https://")
+
+    return url.replace("https://", "http://")
+
   send: (path) ->
-    # request 'https://api.github.com/users/octocat/orgs', (er, res) ->
     @.params = @._prepareData()
     if @.subParams
       @.params.params = @.subParams
@@ -121,7 +114,7 @@ class TRM
           url: "#{@.host}#{path}"
           body: JSON.stringify(@.params)
       }, (er, res) ->
-        if !er
+        if ! er
           return
           # return console.log('browser-request got your root path:\n' + res.body)
 
@@ -171,5 +164,7 @@ global = window || module.exports
 global.analytics = global.analytics || []
 global.analytics = new TRM()
 global.analytics.host = "{DOMAIN_NAME}/track"
-global.console?.log = (msg) ->
-  return msg
+global.console = global.console || {
+  log: (msg) ->
+    return msg  
+}
