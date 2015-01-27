@@ -30,7 +30,8 @@
     "should": "~4.0.4",
     "coffee-script": "~1.7.1",
     "serve-static": "^1.8.1",
-    "finalhandler": "^0.3.3"
+    "finalhandler": "^0.3.3",
+    "supertest": "^0.15.0"
   },
   "author": "clonn",
   "license": "MIT",
