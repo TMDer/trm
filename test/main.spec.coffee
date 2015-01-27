@@ -1,5 +1,6 @@
 trm = require("../out/import")
 fs = require("fs")
+path = require("path")
 trm.DEBUG = true
 
 describe "tracking system test", (done) ->
@@ -37,13 +38,31 @@ describe "tracking system test", (done) ->
 
 describe.only "run trm test", (done) ->
   it "output / save a file", (done) ->
+    destPath = "./test/server/static/.tmp/test.js"
     result = trm.generateLib {
       domain: "yahoo.com.tw"
-      destPath: "./tmp/test.js"
+      destPath: destPath
+      minify: true
     }
 
     result.then (data) ->
-      trm.saveFile "test/.tmp/trm.js", data
-      file = fs.existsSync("test/.tmp/trm.js")
+      # trm.saveFile "test/.tmp/trm.js", data
+      file = fs.existsSync(path.join(process.cwd(), destPath))
       file.should.be.true
       done()
+
+describe "compress content", (done) ->
+  it "only compress", (done) ->
+    content = """
+      var hello = function () {
+        s = "hello" + "world";
+        return s;
+      };
+    """
+    result = trm.compressContent(content)
+    
+    code = result.code
+    code.should.be.a.string
+    code.indexOf("\n").should.be.equal(-1)
+    done()
+
