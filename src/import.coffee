@@ -13,13 +13,12 @@ module.exports = exports = {
     if typeof opt isnt "string"
       return throw "optUrl should be a string type"
     @optUrl = optUrl = opt
-    console.log @.optUrl
     return @
 
   optUrl: optUrl
 
   compress: (filepath, opt) ->
-    filepath = filepath || path.join(__dirname, "../usage/index.js")
+    filepath = filepath || path.join(__dirname, "./usage.js")
     optUrl = opt || optUrl
 
     file = fs.readFileSync filepath, "utf8"

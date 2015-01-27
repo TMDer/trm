@@ -21,13 +21,12 @@ module.exports = exports = {
       throw "optUrl should be a string type";
     }
     this.optUrl = optUrl = opt;
-    console.log(this.optUrl);
     return this;
   },
   optUrl: optUrl,
   compress: function(filepath, opt) {
     var code, file, result;
-    filepath = filepath || path.join(__dirname, "../usage/index.js");
+    filepath = filepath || path.join(__dirname, "./usage.js");
     optUrl = opt || optUrl;
     file = fs.readFileSync(filepath, "utf8");
     file = file.replace("{ENV_PATH}", optUrl);
