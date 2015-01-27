@@ -1,5 +1,5 @@
 var serveStatic = require('serve-static');
-var serve = serveStatic('static');
+var serve = serveStatic(__dirname + '/static');
 var handle = require('finalhandler');
 
 module.exports = function () {

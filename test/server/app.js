@@ -12,7 +12,6 @@ var keys = {
 };
 
 https.createServer(keys, route()).listen(httpsPort);
-
 http.createServer(route()).listen(httpPort);
 
 console.log("create https server");
