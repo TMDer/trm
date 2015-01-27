@@ -26,14 +26,15 @@ module.exports = exports = {
     file = file.replace("{ENV_PATH}", optUrl)
     file = file.replace("{VERSION}", require("../package.json").version)
     code = file
-    result = UglifyJS.minify(code, { fromString: true})
-    if @DEBUG
-      console.log result.code
+    result = @.compressContent(code)
     return result
+
+  compressContent: (content) ->
+    return UglifyJS.minify(content, { fromString: true})
 
   generateLib: (config) ->
     self = @
-    {domain, destPath, srcPath} = config
+    {domain, destPath, srcPath, minify} = config
     filepath = srcPath || path.join(__dirname, "./trm.js")
 
     # will return a promise module
@@ -45,8 +46,15 @@ module.exports = exports = {
         file = src.toString()
         file = file.replace(/{DOMAIN_NAME}/g, domain)
 
-        if (destPath)
-          self.saveFile(destPath, file)
+        if minify
+          file = self.compressContent(file)
+          file = file.code
+
+        unless destPath
+          return reject()
+
+        destPath = path.join(process.cwd(), destPath)
+        self.saveFile(destPath, file)
 
         resolve(file)
 

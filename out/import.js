@@ -33,18 +33,18 @@ module.exports = exports = {
     file = file.replace("{ENV_PATH}", optUrl);
     file = file.replace("{VERSION}", require("../package.json").version);
     code = file;
-    result = UglifyJS.minify(code, {
-      fromString: true
-    });
-    if (this.DEBUG) {
-      console.log(result.code);
-    }
+    result = this.compressContent(code);
     return result;
   },
+  compressContent: function(content) {
+    return UglifyJS.minify(content, {
+      fromString: true
+    });
+  },
   generateLib: function(config) {
-    var destPath, domain, filepath, self, srcPath;
+    var destPath, domain, filepath, minify, self, srcPath;
     self = this;
-    domain = config.domain, destPath = config.destPath, srcPath = config.srcPath;
+    domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
     filepath = srcPath || path.join(__dirname, "./trm.js");
     return new Promise(function(resolve, reject) {
       b.add(filepath);
@@ -55,9 +55,15 @@ module.exports = exports = {
         }
         file = src.toString();
         file = file.replace(/{DOMAIN_NAME}/g, domain);
-        if (destPath) {
-          self.saveFile(destPath, file);
+        if (minify) {
+          file = self.compressContent(file);
+          file = file.code;
         }
+        if (!destPath) {
+          return reject();
+        }
+        destPath = path.join(process.cwd(), destPath);
+        self.saveFile(destPath, file);
         return resolve(file);
       });
     });
