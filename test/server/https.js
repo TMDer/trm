@@ -10,7 +10,7 @@ var keys = {
   cert: fs.readFileSync(__dirname + '/keys/server.crt')
 };
 
-module.exports = server.createServer(keys, route()).listen(httpsPort);
+module.exports = server.createServer(keys, route(httpsPort)).listen(httpsPort);
 
 console.log("create https server");
 console.log("https://localhost:" + httpsPort);
