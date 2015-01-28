@@ -26,17 +26,17 @@ describe "tracking system test", (done) ->
     done()
 
   it "generate library file", (done) ->
-
+    destPath = "./test/server/static/.tmp/test.js"
     result = trm.generateLib {
       domain: "yahoo.com.tw"
-      destPath: "./tmp/test.js"
+      destPath: destPath
     }
 
     result.then (data) ->
       data.should.be.type('string')
       done()
 
-describe.only "run trm test", (done) ->
+describe "run trm test", (done) ->
   it "output / save a file", (done) ->
     destPath = "./test/server/static/.tmp/test.js"
     result = trm.generateLib {
@@ -65,4 +65,14 @@ describe "compress content", (done) ->
     code.should.be.a.string
     code.indexOf("\n").should.be.equal(-1)
     done()
+
+# TRM = require("../out/trm")
+# trmLib = new TRM()
+
+# describe.only "ad group id check", (done) ->
+#   it "verify ad group id is correct from url", (done) ->
+#     url = "http://apps.friday.tw/index.php?page=public&type=fb_xjzl_precious&trackPixelId=14&adGroupId=148"
+#     console.log trmLib
+#     result = trmLib._getAdGroupId(url)
+#     console.log result
 
