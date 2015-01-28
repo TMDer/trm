@@ -24,6 +24,11 @@ module.exports = exports = {
     return this;
   },
   optUrl: optUrl,
+  resultDisplay: function(_arg) {
+    var aid, code, pid;
+    code = _arg.code, pid = _arg.pid, aid = _arg.aid;
+    return code + ("window.analytics.load(function () {\n  window.analytics.initial(\"#pid\", \"" + aid + "\");\n  window.analytics.send(\"\");\n});");
+  },
   compress: function(filepath, opt) {
     var code, file, result;
     filepath = filepath || path.join(__dirname, "./usage.js");

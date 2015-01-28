@@ -17,6 +17,14 @@ module.exports = exports = {
 
   optUrl: optUrl
 
+  resultDisplay: ({code, pid, aid}) ->
+    return code + """
+      window.analytics.load(function () {
+        window.analytics.initial("#pid", "#{aid}");
+        window.analytics.send("");
+      });
+    """
+
   compress: (filepath, opt) ->
     filepath = filepath || path.join(__dirname, "./usage.js")
     optUrl = opt || optUrl

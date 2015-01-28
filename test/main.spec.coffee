@@ -37,7 +37,7 @@ describe "tracking system test", (done) ->
       done()
 
 describe "run trm test", (done) ->
-  it "output / save a file", (done) ->
+  it.only "output / save a file", (done) ->
     destPath = "./test/server/static/.tmp/test.js"
     result = trm.generateLib {
       domain: "yahoo.com.tw"
@@ -64,6 +64,14 @@ describe "compress content", (done) ->
     code = result.code
     code.should.be.a.string
     code.indexOf("\n").should.be.equal(-1)
+    done()
+
+  it "show emebmed code reuls", (done) ->
+    compressed = trm.compress()
+    result = trm.resultDisplay({code: compressed.code, pid: "-999", aid: "-9999"})
+    console.log result
+    result.should.be.string
+    result.indexOf("-9999").should.not.be.equal(-1)
     done()
 
 # TRM = require("../out/trm")
