@@ -1,4 +1,4 @@
-var Promise, UglifyJS, b, browserify, exports, fs, optUrl, path;
+var Promise, UglifyJS, browserify, exports, fs, optUrl, path;
 
 UglifyJS = require("uglify-js");
 
@@ -11,8 +11,6 @@ optUrl = process.LIB || "localhost:1337/lib/trm.compile.js";
 Promise = require("bluebird");
 
 browserify = require('browserify');
-
-b = browserify();
 
 module.exports = exports = {
   DEBUG: false,
@@ -51,6 +49,8 @@ module.exports = exports = {
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
     filepath = srcPath || path.join(__dirname, "./trm.js");
     return new Promise(function(resolve, reject) {
+      var b;
+      b = browserify();
       b.add(filepath);
       return b.bundle(function(err, src) {
         var file;

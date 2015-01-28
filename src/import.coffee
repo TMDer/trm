@@ -5,7 +5,6 @@ optUrl = process.LIB || "localhost:1337/lib/trm.compile.js"
 
 Promise = require("bluebird")
 browserify = require('browserify')
-b = browserify()
 
 module.exports = exports = {
   DEBUG: false
@@ -46,6 +45,7 @@ module.exports = exports = {
 
     # will return a promise module
     return new Promise (resolve, reject) ->
+      b = browserify()
       b.add(filepath)
       b.bundle (err, src) ->
         return reject(err) if err
