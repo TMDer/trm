@@ -66,7 +66,7 @@ describe "compress content", (done) ->
     code.indexOf("\n").should.be.equal(-1)
     done()
 
-  it "show emebmed code reuls", (done) ->
+  it ", resultDisplay function - show emebmed code result", (done) ->
     compressed = trm.compress()
     result = trm.resultDisplay({code: compressed.code, pid: "-999", aid: "-9999"})
     console.log result
