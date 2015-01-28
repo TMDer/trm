@@ -37,7 +37,7 @@ describe "tracking system test", (done) ->
       done()
 
 describe "run trm test", (done) ->
-  it.only "output / save a file", (done) ->
+  it "output / save a file", (done) ->
     destPath = "./test/server/static/.tmp/test.js"
     result = trm.generateLib {
       domain: "yahoo.com.tw"
