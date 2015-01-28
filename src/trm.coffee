@@ -55,7 +55,8 @@ class TRM
 
   _getAdGroupId: (url) ->
     #get adgroup from url
-    url = url.toLowerCase() || location.search.toLowerCase()
+    url = url || location.search
+    url = url.toLowerCase()
     search = qs.parse(url) || null
     qsFromUrl = search[@.KEYS.PARAM_ADGROUP] || ""
 
@@ -95,21 +96,23 @@ class TRM
     @.id = id
     @.aid = aid
 
-  _protocal: (url) ->
-    if window.location.protocol is "https://"
-      return url.replace("http://", "https://")
-
-    return url.replace("https://", "http://")
+  _protocol: (url) ->
+    protocol = if window.location.protocol is "https:" then "https:" else "http:"
+    if url.indexOf("http") is 0
+      return url.replace(/^http:|^https:/, protocol)
+    return protocol + "//" + url
+    
 
   send: (path) ->
     @.params = @._prepareData()
+
     if @.subParams
       @.params.params = @.subParams
 
     try
       request {
           method: "POST"
-          url: "#{@.host}#{path}"
+          url: @._protocol("#{@.host}#{path}")
           body: JSON.stringify(@.params)
       }, (er, res) ->
         if ! er

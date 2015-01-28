@@ -58,7 +58,8 @@ TRM = (function() {
 
   TRM.prototype._getAdGroupId = function(url) {
     var aid, qsFromUrl, search;
-    url = url.toLowerCase() || location.search.toLowerCase();
+    url = url || location.search;
+    url = url.toLowerCase();
     search = qs.parse(url) || null;
     qsFromUrl = search[this.KEYS.PARAM_ADGROUP] || "";
     if (qsFromUrl.length > 0) {
@@ -103,11 +104,13 @@ TRM = (function() {
     return this.aid = aid;
   };
 
-  TRM.prototype._protocal = function(url) {
-    if (window.location.protocol === "https://") {
-      return url.replace("http://", "https://");
+  TRM.prototype._protocol = function(url) {
+    var protocol;
+    protocol = window.location.protocol === "https:" ? "https:" : "http:";
+    if (url.indexOf("http") === 0) {
+      return url.replace(/^http:|^https:/, protocol);
     }
-    return url.replace("https://", "http://");
+    return protocol + "//" + url;
   };
 
   TRM.prototype.send = function(path) {
@@ -119,7 +122,7 @@ TRM = (function() {
     try {
       request({
         method: "POST",
-        url: "" + this.host + path,
+        url: this._protocol("" + this.host + path),
         body: JSON.stringify(this.params)
       }, function(er, res) {
         if (!er) {
