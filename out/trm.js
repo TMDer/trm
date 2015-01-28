@@ -56,9 +56,10 @@ TRM = (function() {
     return param;
   };
 
-  TRM.prototype._getAdGroupId = function() {
+  TRM.prototype._getAdGroupId = function(url) {
     var aid, qsFromUrl, search;
-    search = qs.parse(location.search.toLowerCase().replace("?", "")) || null;
+    url = url.toLowerCase() || location.search.toLowerCase();
+    search = qs.parse(url) || null;
     qsFromUrl = search[this.KEYS.PARAM_ADGROUP] || "";
     if (qsFromUrl.length > 0) {
       this._setCookie(this.KEYS.ADGROUP, qsFromUrl);
@@ -187,3 +188,5 @@ global.console = global.console || {
     return msg;
   }
 };
+
+module.exports = TRM;

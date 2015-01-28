@@ -2,9 +2,6 @@
 ###
 # record, user data
 ###
-
-# emmiter = require("eventemitter")
-
 request = require('browser-request')
 cookie = require("cookie-cutter")
 url = require("url")
@@ -56,9 +53,10 @@ class TRM
 
     return param
 
-  _getAdGroupId: () ->
+  _getAdGroupId: (url) ->
     #get adgroup from url
-    search = qs.parse(location.search.toLowerCase().replace("?", "")) || null
+    url = url.toLowerCase() || location.search.toLowerCase()
+    search = qs.parse(url) || null
     qsFromUrl = search[@.KEYS.PARAM_ADGROUP] || ""
 
     if qsFromUrl.length > 0
@@ -168,3 +166,5 @@ global.console = global.console || {
   log: (msg) ->
     return msg  
 }
+
+module.exports = TRM
