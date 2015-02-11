@@ -47,9 +47,9 @@ class TRM
       id: uuid
     }
 
-    if console
-      console.log "final collect params --> "
-      console.log param
+    # if console
+    #   console.log "final collect params --> "
+    #   console.log param
 
     return param
 
@@ -132,8 +132,8 @@ class TRM
 
     aid = aid || @.aid
 
-    unless aid
-      return console.log("Aid is not found")
+    # unless aid
+    #   return console.log("Aid is not found")
 
     img = new Image(1,1)
     window.document.body.appendChild(img)

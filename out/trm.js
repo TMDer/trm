@@ -49,10 +49,6 @@ TRM = (function() {
       referer: document.referrer || "",
       id: uuid
     };
-    if (console) {
-      console.log("final collect params --> ");
-      console.log(param);
-    }
     return param;
   };
 
@@ -143,9 +139,6 @@ TRM = (function() {
       return;
     }
     aid = aid || this.aid;
-    if (!aid) {
-      return console.log("Aid is not found");
-    }
     img = new Image(1, 1);
     window.document.body.appendChild(img);
     src = this.audienceHost.replace("{AID}", aid);
