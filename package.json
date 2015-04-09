@@ -7,7 +7,8 @@
     "compile": "grunt compile",
     "watch": "grunt watch",
     "start": "./make.sh",
-    "test": "mocha ./test"
+    "test": "mocha ./test",
+    "server": "node test/server/app.js"
   },
   "dependencies": {
     "browser-request": "~0.3.1",
