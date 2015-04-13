@@ -4,6 +4,7 @@ path = require("path")
 trm.DEBUG = true
 
 describe "tracking system test", (done) ->
+
   it "run with path return", (done) ->
     optUrl = "caesarchi.com/test.js"
     trm.config(optUrl)
@@ -52,6 +53,7 @@ describe "run trm test", (done) ->
       done()
 
 describe "compress content", (done) ->
+
   it "only compress", (done) ->
     content = """
       var hello = function () {
@@ -60,7 +62,7 @@ describe "compress content", (done) ->
       };
     """
     result = trm.compressContent(content)
-    
+
     code = result.code
     code.should.be.a.string
     code.indexOf("\n").should.be.equal(-1)
@@ -74,6 +76,20 @@ describe "compress content", (done) ->
     result.indexOf("-9999").should.not.be.equal(-1)
     done()
 
+  it  ", trackingCode response after calling PMD_TRACK server", (done) ->
+    # after calling window.analytics.send("");
+    result =
+      code: 200
+      status: "ok"
+      fbConversionInfo:
+        fbConversionIds: ["6030451885106"]
+    result.should.be.an.Object
+    result.code.should.equal(200)
+    result.status.should.equal('ok')
+    result.fbConversionInfo.should.be.Object
+    result.fbConversionInfo.fbConversionIds.should.be.Array
+    done()
+
 # TRM = require("../out/trm")
 # trmLib = new TRM()
 
@@ -83,4 +99,3 @@ describe "compress content", (done) ->
 #     console.log trmLib
 #     result = trmLib._getAdGroupId(url)
 #     console.log result
-
