@@ -19,6 +19,7 @@ module.exports = exports = {
   resultDisplay: ({code, pid, aid}) ->
     return code + """
       window.analytics.load(function () {
+        window.fbConversion.load();
         window.analytics.initial("#{pid}", "#{aid}");
         window.analytics.send("");
       });

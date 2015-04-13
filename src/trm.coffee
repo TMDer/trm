@@ -101,9 +101,10 @@ class TRM
     if url.indexOf("http") is 0
       return url.replace(/^http:|^https:/, protocol)
     return protocol + "//" + url
-    
 
-  send: (path) ->
+
+  send: (path, _fbq) ->
+    that = @
     @.params = @._prepareData()
 
     if @.subParams
@@ -116,6 +117,9 @@ class TRM
           body: JSON.stringify(@.params)
       }, (er, res) ->
         if ! er
+          result = JSON.parse res.body
+          fbConversionIds = JSON.parse("[" + result.fbConversionInfo.fbConversionIds + "]")
+          that.sendFbConversionInfo(fbConversionIds, _fbq)
           return
           # return console.log('browser-request got your root path:\n' + res.body)
 
@@ -124,6 +128,11 @@ class TRM
       return console.log("send request, error happen")
 
     @sendAudience()
+
+  sendFbConversionInfo: (fbConversionIds, _fbq) ->
+    for fbConversionId in fbConversionIds
+        _fbq = _fbq || []
+        _fbq.push ['track', fbConversionId, {'value':'0.00','currency':'USD'}]
 
   sendAudience: (aid) ->
 
@@ -167,7 +176,7 @@ global.analytics = new TRM()
 global.analytics.host = "{DOMAIN_NAME}/track"
 global.console = global.console || {
   log: (msg) ->
-    return msg  
+    return msg
 }
 
 module.exports = TRM
