@@ -1,4 +1,18 @@
 !(function() {
+  window.fbConversion = {
+    load: function() {
+      var fbds, s, _fbq;
+      _fbq = window._fbq || (window._fbq = []);
+      if (!_fbq.loaded) {
+        fbds = document.createElement('script');
+        fbds.async = true;
+        fbds.src = '//connect.facebook.net/en_US/fbds.js';
+        s = document.getElementsByTagName('script')[0];
+        s.parentNode.insertBefore(fbds, s);
+        _fbq.loaded = true;
+      }
+    }
+  };
   return window.analytics = {
     load: function(callback) {
       var a, event, n;

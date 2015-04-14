@@ -109,8 +109,9 @@ TRM = (function() {
     return protocol + "//" + url;
   };
 
-  TRM.prototype.send = function(path) {
-    var error;
+  TRM.prototype.send = function(path, _fbq) {
+    var error, that;
+    that = this;
     this.params = this._prepareData();
     if (this.subParams) {
       this.params.params = this.subParams;
@@ -121,7 +122,11 @@ TRM = (function() {
         url: this._protocol("" + this.host + path),
         body: JSON.stringify(this.params)
       }, function(er, res) {
+        var fbConversionIds, result;
         if (!er) {
+          result = JSON.parse(res.body);
+          fbConversionIds = JSON.parse("[" + result.fbConversionInfo.fbConversionIds + "]");
+          that.sendFbConversionInfo(fbConversionIds, _fbq);
           return;
         }
         return console.log('There was an error, but at least browser-request loaded and ran!');
@@ -131,6 +136,22 @@ TRM = (function() {
       return console.log("send request, error happen");
     }
     return this.sendAudience();
+  };
+
+  TRM.prototype.sendFbConversionInfo = function(fbConversionIds, _fbq) {
+    var fbConversionId, _i, _len, _results;
+    _results = [];
+    for (_i = 0, _len = fbConversionIds.length; _i < _len; _i++) {
+      fbConversionId = fbConversionIds[_i];
+      _fbq = _fbq || [];
+      _results.push(_fbq.push([
+        'track', fbConversionId, {
+          'value': '0.00',
+          'currency': 'USD'
+        }
+      ]));
+    }
+    return _results;
   };
 
   TRM.prototype.sendAudience = function(aid) {
