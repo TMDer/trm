@@ -47,7 +47,8 @@ TRM = (function() {
       trackPixelId: this.id || 0,
       adGroupId: aid || 0,
       referer: document.referrer || "",
-      id: uuid
+      id: uuid,
+      version: this.version || ""
     };
     return param;
   };
@@ -98,6 +99,10 @@ TRM = (function() {
   TRM.prototype.initial = function(id, aid) {
     this.id = id;
     return this.aid = aid;
+  };
+
+  TRM.prototype.setVersion = function(version) {
+    return this.version = version;
   };
 
   TRM.prototype._protocol = function(url) {

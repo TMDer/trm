@@ -45,6 +45,7 @@ class TRM
       adGroupId: aid || 0
       referer: document.referrer || ""
       id: uuid
+      version: @.version || ""
     }
 
     # if console
@@ -95,6 +96,9 @@ class TRM
   initial: (id, aid) ->
     @.id = id
     @.aid = aid
+
+  setVersion: (version) ->
+    @.version = version
 
   _protocol: (url) ->
     protocol = if window.location.protocol is "https:" then "https:" else "http:"
