@@ -21,10 +21,8 @@ module.exports = exports = {
     
     return code + """
       window.analytics.load(function () {
-        window.fbConversion.load();
         window.analytics.initial("#{pid}", "#{aid}");
-        window.analytics.setVersion("#{VERSION}");
-        window.analytics.send("", _fbq);
+        window.analytics.send("");
       });
     """
 

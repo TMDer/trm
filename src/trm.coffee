@@ -7,6 +7,7 @@ cookie = require("cookie-cutter")
 url = require("url")
 qs = require("querystring")
 uuid = require('node-uuid')
+VERSION = require("../package.json").version
 
 
 class TRM
@@ -45,7 +46,7 @@ class TRM
       adGroupId: aid || 0
       referer: document.referrer || ""
       id: uuid
-      version: @.version || ""
+      version: @.version || VERSION || ""
     }
 
     # if console
@@ -107,7 +108,7 @@ class TRM
     return protocol + "//" + url
 
 
-  send: (path, _fbq) ->
+  send: (path) ->
     that = @
     @.params = @._prepareData()
 
@@ -123,7 +124,7 @@ class TRM
         if ! er
           result = JSON.parse res.body
           fbConversionIds = JSON.parse("[" + result.fbConversionInfo.fbConversionIds + "]")
-          that.sendFbConversionInfo(fbConversionIds, _fbq)
+          that.sendFbConversionInfo(fbConversionIds)
           return
           # return console.log('browser-request got your root path:\n' + res.body)
 
@@ -134,6 +135,17 @@ class TRM
     @sendAudience()
 
   sendFbConversionInfo: (fbConversionIds, _fbq) ->
+
+    _fbq = window._fbq or (window._fbq = [])
+    if !_fbq.loaded
+      fbds = document.createElement('script')
+      fbds.async = true
+      fbds.src = '//connect.facebook.net/en_US/fbds.js'
+      s = document.getElementsByTagName('script')[0]
+      s.parentNode.insertBefore fbds, s
+      _fbq.loaded = true
+
+
     for fbConversionId in fbConversionIds
         _fbq = _fbq || []
         _fbq.push ['track', fbConversionId, {'value':'0.00','currency':'USD'}]
