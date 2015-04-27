@@ -23,7 +23,7 @@ module.exports = exports = {
       window.analytics.load(function () {
         window.fbConversion.load();
         window.analytics.initial("#{pid}", "#{aid}");
-        window.analytics.serVersion("#{VERSION}");
+        window.analytics.setVersion("#{VERSION}");
         window.analytics.send("", _fbq);
       });
     """
