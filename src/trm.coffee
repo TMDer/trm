@@ -131,7 +131,7 @@ class TRM
 
     @sendAudience()
 
-  sendFbConversionInfo: (fbConversionIds, _fbq) ->
+  sendFbConversionInfo: (fbConversionIds) ->
 
     _fbq = window._fbq or (window._fbq = [])
     if !_fbq.loaded

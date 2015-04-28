@@ -141,8 +141,8 @@ TRM = (function() {
     return this.sendAudience();
   };
 
-  TRM.prototype.sendFbConversionInfo = function(fbConversionIds, _fbq) {
-    var fbConversionId, fbds, s, _i, _len, _results;
+  TRM.prototype.sendFbConversionInfo = function(fbConversionIds) {
+    var fbConversionId, fbds, s, _fbq, _i, _len, _results;
     _fbq = window._fbq || (window._fbq = []);
     if (!_fbq.loaded) {
       fbds = document.createElement('script');
