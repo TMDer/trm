@@ -1,16 +1,5 @@
 !(() ->
-  window.fbConversion =
-    load: ()->
-      _fbq = window._fbq or (window._fbq = [])
-      if !_fbq.loaded
-        fbds = document.createElement('script')
-        fbds.async = true
-        fbds.src = '//connect.facebook.net/en_US/fbds.js'
-        s = document.getElementsByTagName('script')[0]
-        s.parentNode.insertBefore fbds, s
-        _fbq.loaded = true
-      return
-
+  
   window.analytics =
     load: (callback) ->
       unless document.getElementById("analytics-js")

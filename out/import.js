@@ -1,4 +1,4 @@
-var Promise, UglifyJS, browserify, exports, fs, optUrl, path;
+var Promise, UglifyJS, VERSION, browserify, exports, fs, optUrl, path;
 
 UglifyJS = require("uglify-js");
 
@@ -11,6 +11,8 @@ optUrl = process.LIB || "localhost:1337/lib/trm.compile.js";
 Promise = require("bluebird");
 
 browserify = require('browserify');
+
+VERSION = require("../package.json").version;
 
 module.exports = exports = {
   DEBUG: false,
@@ -25,7 +27,7 @@ module.exports = exports = {
   resultDisplay: function(_arg) {
     var aid, code, pid;
     code = _arg.code, pid = _arg.pid, aid = _arg.aid;
-    return code + ("window.analytics.load(function () {\n  window.fbConversion.load();\n  window.analytics.initial(\"" + pid + "\", \"" + aid + "\");\n  window.analytics.send(\"\", _fbq);\n});");
+    return code + ("window.analytics.load(function () {\n  window.analytics.initial(\"" + pid + "\", \"" + aid + "\");\n  window.analytics.send(\"\");\n});");
   },
   compress: function(filepath, opt) {
     var code, file, result;
@@ -33,7 +35,7 @@ module.exports = exports = {
     optUrl = opt || optUrl;
     file = fs.readFileSync(filepath, "utf8");
     file = file.replace("{ENV_PATH}", optUrl);
-    file = file.replace("{VERSION}", require("../package.json").version);
+    file = file.replace("{VERSION}", VERSION);
     code = file;
     result = this.compressContent(code);
     return result;

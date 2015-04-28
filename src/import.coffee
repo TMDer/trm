@@ -5,6 +5,7 @@ optUrl = process.LIB || "localhost:1337/lib/trm.compile.js"
 
 Promise = require("bluebird")
 browserify = require('browserify')
+VERSION = require("../package.json").version
 
 module.exports = exports = {
   DEBUG: false
@@ -17,11 +18,11 @@ module.exports = exports = {
   optUrl: optUrl
 
   resultDisplay: ({code, pid, aid}) ->
+    
     return code + """
       window.analytics.load(function () {
-        window.fbConversion.load();
         window.analytics.initial("#{pid}", "#{aid}");
-        window.analytics.send("", _fbq);
+        window.analytics.send("");
       });
     """
 
@@ -31,7 +32,7 @@ module.exports = exports = {
 
     file = fs.readFileSync filepath, "utf8"
     file = file.replace("{ENV_PATH}", optUrl)
-    file = file.replace("{VERSION}", require("../package.json").version)
+    file = file.replace("{VERSION}", VERSION)
     code = file
     result = @.compressContent(code)
     return result

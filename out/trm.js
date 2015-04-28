@@ -2,7 +2,7 @@
 # record, user data
 */
 
-var TRM, cookie, global, qs, request, url, uuid;
+var TRM, VERSION, cookie, global, qs, request, url, uuid;
 
 request = require('browser-request');
 
@@ -13,6 +13,8 @@ url = require("url");
 qs = require("querystring");
 
 uuid = require('node-uuid');
+
+VERSION = require("../package.json").version;
 
 TRM = (function() {
   function TRM() {
@@ -47,7 +49,8 @@ TRM = (function() {
       trackPixelId: this.id || 0,
       adGroupId: aid || 0,
       referer: document.referrer || "",
-      id: uuid
+      id: uuid,
+      version: VERSION || ""
     };
     return param;
   };
@@ -109,7 +112,7 @@ TRM = (function() {
     return protocol + "//" + url;
   };
 
-  TRM.prototype.send = function(path, _fbq) {
+  TRM.prototype.send = function(path) {
     var error, that;
     that = this;
     this.params = this._prepareData();
@@ -126,7 +129,7 @@ TRM = (function() {
         if (!er) {
           result = JSON.parse(res.body);
           fbConversionIds = JSON.parse("[" + result.fbConversionInfo.fbConversionIds + "]");
-          that.sendFbConversionInfo(fbConversionIds, _fbq);
+          that.sendFbConversionInfo(fbConversionIds);
           return;
         }
         return console.log('There was an error, but at least browser-request loaded and ran!');
@@ -138,8 +141,17 @@ TRM = (function() {
     return this.sendAudience();
   };
 
-  TRM.prototype.sendFbConversionInfo = function(fbConversionIds, _fbq) {
-    var fbConversionId, _i, _len, _results;
+  TRM.prototype.sendFbConversionInfo = function(fbConversionIds) {
+    var fbConversionId, fbds, s, _fbq, _i, _len, _results;
+    _fbq = window._fbq || (window._fbq = []);
+    if (!_fbq.loaded) {
+      fbds = document.createElement('script');
+      fbds.async = true;
+      fbds.src = '//connect.facebook.net/en_US/fbds.js';
+      s = document.getElementsByTagName('script')[0];
+      s.parentNode.insertBefore(fbds, s);
+      _fbq.loaded = true;
+    }
     _results = [];
     for (_i = 0, _len = fbConversionIds.length; _i < _len; _i++) {
       fbConversionId = fbConversionIds[_i];
