@@ -27,7 +27,7 @@ module.exports = exports = {
   resultDisplay: function(_arg) {
     var aid, code, pid;
     code = _arg.code, pid = _arg.pid, aid = _arg.aid;
-    return code + ("window.analytics.load(function () {\n  window.fbConversion.load();\n  window.analytics.initial(\"" + pid + "\", \"" + aid + "\");\n  window.analytics.send(\"\");\n});");
+    return code + ("window.analytics.load(function () {\n  window.analytics.initial(\"" + pid + "\", \"" + aid + "\");\n  window.analytics.send(\"\");\n});");
   },
   compress: function(filepath, opt) {
     var code, file, result;
