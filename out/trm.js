@@ -19,7 +19,7 @@ VERSION = require("../package.json").version;
 TRM = (function() {
   function TRM() {
     this.host = "{DOMAIN_NAME}/track";
-    this.audienceHost = "https://www.facebook.com/tr?id={AID}&amp;ev=PixelInitialized";
+    this.audienceHost = "https://www.facebook.com/tr?id={AID}&ev=PixelInitialized";
     this.params = {};
     this.subParams = {};
     this.KEYS = {

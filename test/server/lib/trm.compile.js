@@ -79,7 +79,7 @@ function request(options, callback) {
     else if(typeof options.body !== 'string')
       options.body = JSON.stringify(options.body)
   }
-  
+
   //BEGIN QS Hack
   var serialize = function(obj) {
     var str = [];
@@ -89,7 +89,7 @@ function request(options, callback) {
       }
     return str.join("&");
   }
-  
+
   if(options.qs){
     var qs = (typeof options.qs == 'string')? options.qs : serialize(options.qs);
     if(options.uri.indexOf('?') !== -1){ //no get params
@@ -99,7 +99,7 @@ function request(options, callback) {
     }
   }
   //END QS Hack
-  
+
   //BEGIN FORM Hack
   var multipart = function(obj) {
     //todo: support file type (useful?)
@@ -122,7 +122,7 @@ function request(options, callback) {
     result.type = 'multipart/form-data; boundary='+result.boundry;
     return result;
   }
-  
+
   if(options.form){
     if(typeof options.form == 'string') throw('form name unsupported');
     if(options.method === 'POST'){
@@ -3057,7 +3057,7 @@ module.exports = function (crypto, exports) {
       /* This will not work in older browsers.
        * See https://developer.mozilla.org/en-US/docs/Web/API/window.crypto.getRandomValues
        */
-    
+
       _crypto.getRandomValues(bytes);
       return bytes;
     }
@@ -5164,7 +5164,7 @@ var exports = module.exports = function (doc) {
     if (!doc) doc = {};
     if (typeof doc === 'string') doc = { cookie: doc };
     if (doc.cookie === undefined) doc.cookie = '';
-    
+
     var self = {};
     self.get = function (key) {
         var splat = doc.cookie.split(/;\s*/);
@@ -5175,7 +5175,7 @@ var exports = module.exports = function (doc) {
         }
         return undefined;
     };
-    
+
     self.set = function (key, value, opts) {
         if (!opts) opts = {};
         var s = escape(key) + '=' + escape(value);
@@ -5462,7 +5462,7 @@ uuid = require('node-uuid');
 TRM = (function() {
   function TRM() {
     this.host = "{DOMAIN_NAME}/track";
-    this.audienceHost = "https://www.facebook.com/tr?id={AID}&amp;ev=PixelInitialized";
+    this.audienceHost = "https://www.facebook.com/tr?id={AID}&ev=PixelInitialized";
     this.params = {};
     this.subParams = {};
     this.KEYS = {

@@ -13,7 +13,7 @@ VERSION = require("../package.json").version
 class TRM
   constructor: () ->
     @.host = "{DOMAIN_NAME}/track"
-    @.audienceHost = "https://www.facebook.com/tr?id={AID}&amp;ev=PixelInitialized"
+    @.audienceHost = "https://www.facebook.com/tr?id={AID}&ev=PixelInitialized"
     @.params = {}
     @.subParams = {}
     @.KEYS = {
