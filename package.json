@@ -2,7 +2,7 @@
   "name": "trm",
   "version": "0.2.3",
   "description": "tracking management client code",
-  "main": "./out/import.js",
+  "main": "./out/cap_import.js",
   "scripts": {
     "compile": "grunt compile",
     "watch": "grunt watch",
