@@ -48,7 +48,7 @@ class TRM
           if currentUrl.indexOf trigger.emitUrl is -1 then return
           that.process trigger
 
-    _.defer touchAdMinerEvent
+    _.defer @touchAdMinerEvent
 
 
 

@@ -58,7 +58,7 @@ TRM = (function() {
           return that.process(trigger);
       }
     });
-    return _.defer(touchAdMinerEvent);
+    return _.defer(this.touchAdMinerEvent);
   };
 
   TRM.prototype.initFacebookPixel = function() {
