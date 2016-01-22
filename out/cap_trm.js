@@ -52,7 +52,7 @@ TRM = (function() {
           return that.setTriggerElementEvent(trigger);
         case "page":
           currentUrl = window.location.href;
-          if (currentUrl.indexOf(trigger.emitUrl === -1)) {
+          if (currentUrl.indexOf(trigger.emitUrl) === -1) {
             return;
           }
           return that.process(trigger);
