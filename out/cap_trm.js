@@ -97,7 +97,9 @@ TRM = (function() {
     console.log("!!! process");
     that = this;
     elementsObj = trigger.elementsObj;
-    data = {};
+    data = {
+      triggerEventId: trigger.id
+    };
     console.log("!!! elements to collect", elementsObj);
     _.forEach(elementsObj, function(element, key) {
       var e;

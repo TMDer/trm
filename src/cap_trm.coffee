@@ -91,7 +91,8 @@ class TRM
     console.log "!!! process"
     that = @
     elementsObj = trigger.elementsObj
-    data = {}
+    data =
+      triggerEventId: trigger.id
 
     console.log "!!! elements to collect", elementsObj
 
