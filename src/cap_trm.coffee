@@ -295,7 +295,16 @@ class TRM
 
 
 
+global = window || module.exports
+global.analytics = global.analytics || []
+global.analytics = new TRM()
+global.analytics.host = "{DOMAIN_NAME}/track"
+global.console = global.console || {
+  log: (msg) ->
+    return msg
+}
 
+module.exports = TRM
 
 
 
