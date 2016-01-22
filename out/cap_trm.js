@@ -2,7 +2,7 @@
 # record, user data
 */
 
-var TRM, VERSION, cookie, qs, request, url, uuid;
+var TRM, VERSION, cookie, global, qs, request, url, uuid;
 
 request = require('browser-request');
 
@@ -247,3 +247,19 @@ TRM = (function() {
   return TRM;
 
 })();
+
+global = window || module.exports;
+
+global.analytics = global.analytics || [];
+
+global.analytics = new TRM();
+
+global.analytics.host = "{DOMAIN_NAME}/track";
+
+global.console = global.console || {
+  log: function(msg) {
+    return msg;
+  }
+};
+
+module.exports = TRM;
