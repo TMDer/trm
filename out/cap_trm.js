@@ -44,7 +44,7 @@ TRM = (function() {
     this.touchFacebookEvent(["track", "PageView"]);
     this.touchFacebookEvent(["track", "ViewContent"]);
     triggers = this.data.triggers;
-    _.forEach(data, function(trigger) {
+    _.forEach(triggers, function(trigger) {
       var currentUrl;
       console.log("!!! flow trigger", trigger);
       switch (trigger.triggerType) {

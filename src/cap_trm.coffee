@@ -38,7 +38,7 @@ class TRM
     @touchFacebookEvent ["track", "ViewContent"]
     triggers = @data.triggers
 
-    _.forEach data, (trigger) ->
+    _.forEach triggers, (trigger) ->
       console.log "!!! flow trigger", trigger
       switch trigger.triggerType
         when "element"
