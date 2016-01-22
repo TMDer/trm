@@ -19,6 +19,15 @@ class TRM
     @data = {PIXEL_DATA}
     @targetTable = {TARGET_DATA}
     @pmdReturnData = {}
+    @KEYS = {
+      ID: "pmd.uuid"
+      ADGROUP: "pmd.adGroupId"
+      PARAM_ADGROUP: "adgroupid"
+      TRACKPIXEL: "pmd.trackPixelId"
+      EXPIRES: 7
+      FOREVER: 9999999999
+      AUDIENCETAGID: "pmd-tag-aid"
+    }
     return @
 
 
@@ -48,7 +57,8 @@ class TRM
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
           that.process trigger
 
-    _.defer @touchAdMinerEvent
+    # _.defer @touchAdMinerEvent
+    @touchAdMinerEvent()
 
 
 

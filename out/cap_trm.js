@@ -28,6 +28,15 @@ TRM = (function() {
       TARGET_DATA: TARGET_DATA
     };
     this.pmdReturnData = {};
+    this.KEYS = {
+      ID: "pmd.uuid",
+      ADGROUP: "pmd.adGroupId",
+      PARAM_ADGROUP: "adgroupid",
+      TRACKPIXEL: "pmd.trackPixelId",
+      EXPIRES: 7,
+      FOREVER: 9999999999,
+      AUDIENCETAGID: "pmd-tag-aid"
+    };
     return this;
   }
 
@@ -58,7 +67,7 @@ TRM = (function() {
           return that.process(trigger);
       }
     });
-    return _.defer(this.touchAdMinerEvent);
+    return this.touchAdMinerEvent();
   };
 
   TRM.prototype.initFacebookPixel = function() {
