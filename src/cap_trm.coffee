@@ -7,6 +7,7 @@ url = require("url")
 qs = require("querystring")
 uuid = require('node-uuid')
 VERSION = require("../package.json").version
+_ = require("lodash")
 
 
 

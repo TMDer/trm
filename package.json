@@ -11,13 +11,14 @@
     "dev-server": "node test/server/app.js"
   },
   "dependencies": {
-    "browser-request": "~0.3.1",
-    "noder": "0.0.10",
-    "cookie-cutter": "~0.1.1",
-    "node-uuid": "~1.4.1",
-    "uglify-js": "~2.4.14",
     "bluebird": "^2.3.2",
-    "browserify": "^5.11.2"
+    "browser-request": "~0.3.1",
+    "browserify": "^5.11.2",
+    "cookie-cutter": "~0.1.1",
+    "lodash": "^4.0.0",
+    "node-uuid": "~1.4.1",
+    "noder": "0.0.10",
+    "uglify-js": "~2.4.14"
   },
   "devDependencies": {
     "grunt": "~0.4.1",
