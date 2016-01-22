@@ -2,7 +2,7 @@
 # record, user data
 */
 
-var TRM, VERSION, cookie, global, qs, request, url, uuid;
+var TRM, VERSION, cookie, global, qs, request, url, uuid, _;
 
 request = require('browser-request');
 
@@ -15,6 +15,8 @@ qs = require("querystring");
 uuid = require('node-uuid');
 
 VERSION = require("../package.json").version;
+
+_ = require("lodash");
 
 TRM = (function() {
   function TRM() {
