@@ -52,6 +52,7 @@ TRM = (function() {
     this.initFacebookPixel();
     this.touchFacebookEvent(["track", "PageView"]);
     this.touchFacebookEvent(["track", "ViewContent"]);
+    this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
     _.forEach(triggers, function(trigger) {
       var currentUrl;
@@ -92,12 +93,12 @@ TRM = (function() {
   };
 
   TRM.prototype.process = function(trigger, callback) {
-    var data, elementsObj, fbDataArray, that, totalPrice;
+    var data, elementsObj, fbDataArray, that, totalPrice, totalPrices;
     console.log("!!! process");
     that = this;
     elementsObj = trigger.elementsObj;
     data = {};
-    console.log("!!! elements to collect", elementsObjt);
+    console.log("!!! elements to collect", elementsObj);
     _.forEach(elementsObj, function(element, key) {
       var e;
       e = that.queryElement(element);
@@ -117,8 +118,9 @@ TRM = (function() {
     console.log("!!! fbDataArray", fbDataArray);
     this.touchFacebookEvent(fbDataArray);
     this.pmdReturnData[trigger.triggerTarget] = data;
-    totalPrice = data.totalPrices[0];
-    if (totalPrice) {
+    totalPrices = data.totalPrices;
+    if (totalPrices && totalPrices[0]) {
+      totalPrice = totalPrices[0];
       this.pmdReturnData.price = totalPrice;
       this.pmdReturnData.currency = trigger.currency;
     }

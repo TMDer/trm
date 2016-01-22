@@ -45,6 +45,7 @@ class TRM
     @initFacebookPixel()
     @touchFacebookEvent ["track", "PageView"]
     @touchFacebookEvent ["track", "ViewContent"]
+    @id = @data.trackPixelId
     triggers = @data.triggers
 
     _.forEach triggers, (trigger) ->
@@ -92,7 +93,7 @@ class TRM
     elementsObj = trigger.elementsObj
     data = {}
 
-    console.log "!!! elements to collect", elementsObjt
+    console.log "!!! elements to collect", elementsObj
 
     _.forEach elementsObj, (element, key) ->
       e = that.queryElement element
@@ -119,8 +120,9 @@ class TRM
     @pmdReturnData[trigger.triggerTarget] = data
 
     # For Tracker targetValues 相容性
-    totalPrice = data.totalPrices[0]
-    if totalPrice
+    totalPrices = data.totalPrices
+    if totalPrices and totalPrices[0]
+      totalPrice = totalPrices[0]
       @pmdReturnData.price = totalPrice
       @pmdReturnData.currency = trigger.currency
 
