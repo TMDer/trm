@@ -118,8 +118,7 @@ TRM = (function() {
     console.log("!!! collect elements data", data);
     fbDataArray = this.transformData(trigger.triggerTarget, data);
     if (fbDataArray[1] === "CheckoutFlow") {
-      step = data.emitStep;
-      delete fbDataArray[2].emitStep;
+      step = trigger.emitStep;
       fbDataArray[1] = fbDataArray[1] + step;
       if (step === 1) {
         fbDataForInitiateCheckout = ["track", "InitiateCheckout"];

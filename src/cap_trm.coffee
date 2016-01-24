@@ -115,8 +115,7 @@ class TRM
     fbDataArray = @transformData trigger.triggerTarget, data
 
     if fbDataArray[1] is "CheckoutFlow"
-      step = data.emitStep
-      delete fbDataArray[2].emitStep
+      step = trigger.emitStep
       fbDataArray[1] = fbDataArray[1] + step
       if step is 1
         fbDataForInitiateCheckout = ["track", "InitiateCheckout"]
