@@ -93,7 +93,7 @@ TRM = (function() {
   };
 
   TRM.prototype.process = function(trigger, callback) {
-    var data, elementsObj, fbDataArray, that, totalPrice, totalPrices;
+    var data, elementsObj, fbDataArray, fbDataForInitiateCheckout, step, that, totalPrice, totalPrices;
     console.log("!!! process");
     that = this;
     elementsObj = trigger.elementsObj;
@@ -117,6 +117,17 @@ TRM = (function() {
     });
     console.log("!!! collect elements data", data);
     fbDataArray = this.transformData(trigger.triggerTarget, data);
+    if (fbDataArray[1] === "CheckoutFlow") {
+      step = data.emitStep;
+      delete fbDataArray[2].emitStep;
+      fbDataArray[1] = fbDataArray[1] + step;
+      if (step === 1) {
+        fbDataForInitiateCheckout = ["track", "InitiateCheckout"];
+        fbDataForInitiateCheckout.push(fbDataArray[2]);
+        console.log("!!! fbDataForInitiateCheckout", fbDataForInitiateCheckout);
+        this.touchFacebookEvent(fbDataForInitiateCheckout);
+      }
+    }
     console.log("!!! fbDataArray", fbDataArray);
     this.touchFacebookEvent(fbDataArray);
     this.pmdReturnData[trigger.triggerTarget] = data;

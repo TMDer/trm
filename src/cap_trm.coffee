@@ -113,6 +113,17 @@ class TRM
     console.log "!!! collect elements data", data
 
     fbDataArray = @transformData trigger.triggerTarget, data
+
+    if fbDataArray[1] is "CheckoutFlow"
+      step = data.emitStep
+      delete fbDataArray[2].emitStep
+      fbDataArray[1] = fbDataArray[1] + step
+      if step is 1
+        fbDataForInitiateCheckout = ["track", "InitiateCheckout"]
+        fbDataForInitiateCheckout.push fbDataArray[2]
+        console.log "!!! fbDataForInitiateCheckout", fbDataForInitiateCheckout
+        @touchFacebookEvent fbDataForInitiateCheckout
+
     console.log "!!! fbDataArray", fbDataArray
 
     @touchFacebookEvent fbDataArray
