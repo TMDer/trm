@@ -206,7 +206,8 @@ class TRM
   queryElement: (elementWithQueryInfo) ->
 
     if elementWithQueryInfo.id
-      return document.getElementById elementWithQueryInfo.id
+      element = document.getElementById elementWithQueryInfo.id
+      return [element]
     if elementWithQueryInfo.class
       return document.getElementsByClassName elementWithQueryInfo.class
     if elementWithQueryInfo.name

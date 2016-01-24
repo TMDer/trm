@@ -168,8 +168,10 @@ TRM = (function() {
   };
 
   TRM.prototype.queryElement = function(elementWithQueryInfo) {
+    var element;
     if (elementWithQueryInfo.id) {
-      return document.getElementById(elementWithQueryInfo.id);
+      element = document.getElementById(elementWithQueryInfo.id);
+      return [element];
     }
     if (elementWithQueryInfo["class"]) {
       return document.getElementsByClassName(elementWithQueryInfo["class"]);
