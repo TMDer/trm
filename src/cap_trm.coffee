@@ -112,10 +112,12 @@ class TRM
     # }
     console.log "!!! collect elements data", data
 
-    fbDataArray = @transformData trigger.triggerTarget, data
+    triggerTarget = trigger.triggerTarget
+    fbDataArray = @transformData triggerTarget, data
 
     if fbDataArray[1] is "CheckoutFlow"
       step = trigger.emitStep
+      triggerTarget = triggerTarget + step
       fbDataArray[1] = fbDataArray[1] + step
       if step is 1
         fbDataForInitiateCheckout = ["track", "InitiateCheckout"]
@@ -126,9 +128,7 @@ class TRM
     console.log "!!! fbDataArray", fbDataArray
 
     @touchFacebookEvent fbDataArray
-    
-    # triggerTarget = trigger.triggerTarget
-    @pmdReturnData[trigger.triggerTarget] = data
+    @pmdReturnData[triggerTarget] = data
 
     # For Tracker targetValues 相容性
     totalPrices = data.totalPrices
