@@ -34,6 +34,7 @@ class TRM
 
   setNGo: (info) ->
     # info: {email: "xxx"}
+    @info = info
     @pmdReturnData = info
     @flow()
 
@@ -58,7 +59,6 @@ class TRM
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
           that.process trigger
 
-    # _.defer @touchAdMinerEvent
     @touchAdMinerEvent()
 
 
@@ -129,6 +129,13 @@ class TRM
     console.log "!!! fbDataArray", fbDataArray
 
     @touchFacebookEvent fbDataArray
+
+    if _.isFunction callback
+      eventData = _.cloneDeep @info
+      eventData[triggerTarget] = data
+      callback.call that, eventData
+      return
+
     @pmdReturnData[triggerTarget] = data
 
     # For Tracker targetValues 相容性
@@ -137,8 +144,6 @@ class TRM
       totalPrice = totalPrices[0]
       @pmdReturnData.price = totalPrice
       @pmdReturnData.currency = trigger.currency
-
-    if _.isFunction callback then callback.call(that)
 
 
 
@@ -216,11 +221,13 @@ class TRM
 
 
 
-  touchAdMinerEvent: () ->
+  touchAdMinerEvent: (data = undefined) ->
+
+    console.log "!!! data", data
 
     that = @
     @params = @_prepareData()
-    @params.params = @pmdReturnData
+    @params.params = if data then data else @pmdReturnData
 
     try
       request {

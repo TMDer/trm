@@ -41,6 +41,7 @@ TRM = (function() {
   }
 
   TRM.prototype.setNGo = function(info) {
+    this.info = info;
     this.pmdReturnData = info;
     return this.flow();
   };
@@ -95,7 +96,7 @@ TRM = (function() {
   };
 
   TRM.prototype.process = function(trigger, callback) {
-    var data, elementsObj, fbDataArray, fbDataForInitiateCheckout, step, that, totalPrice, totalPrices, triggerTarget;
+    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, step, that, totalPrice, totalPrices, triggerTarget;
     console.log("!!! process");
     that = this;
     elementsObj = trigger.elementsObj;
@@ -133,15 +134,18 @@ TRM = (function() {
     }
     console.log("!!! fbDataArray", fbDataArray);
     this.touchFacebookEvent(fbDataArray);
+    if (_.isFunction(callback)) {
+      eventData = _.cloneDeep(this.info);
+      eventData[triggerTarget] = data;
+      callback.call(that, eventData);
+      return;
+    }
     this.pmdReturnData[triggerTarget] = data;
     totalPrices = data.totalPrices;
     if (totalPrices && totalPrices[0]) {
       totalPrice = totalPrices[0];
       this.pmdReturnData.price = totalPrice;
-      this.pmdReturnData.currency = trigger.currency;
-    }
-    if (_.isFunction(callback)) {
-      return callback.call(that);
+      return this.pmdReturnData.currency = trigger.currency;
     }
   };
 
@@ -185,11 +189,15 @@ TRM = (function() {
     return document.querySelectorAll(elementWithQueryInfo.custom);
   };
 
-  TRM.prototype.touchAdMinerEvent = function() {
+  TRM.prototype.touchAdMinerEvent = function(data) {
     var error, that;
+    if (data == null) {
+      data = void 0;
+    }
+    console.log("!!! data", data);
     that = this;
     this.params = this._prepareData();
-    this.params.params = this.pmdReturnData;
+    this.params.params = data ? data : this.pmdReturnData;
     try {
       return request({
         method: "POST",
