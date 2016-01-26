@@ -51,9 +51,9 @@ class TRM
     _.forEach triggers, (trigger) ->
       console.log "!!! flow trigger", trigger
       switch trigger.triggerType
-        when "element"
+        when "Element"
           that.setTriggerElementEvent trigger
-        when "page"
+        when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
           that.process trigger

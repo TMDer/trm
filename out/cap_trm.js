@@ -58,9 +58,9 @@ TRM = (function() {
       var currentUrl;
       console.log("!!! flow trigger", trigger);
       switch (trigger.triggerType) {
-        case "element":
+        case "Element":
           return that.setTriggerElementEvent(trigger);
-        case "page":
+        case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
             return;
