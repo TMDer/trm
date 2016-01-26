@@ -79,11 +79,12 @@ class TRM
     console.log "!!! setTriggerElementEvent"
     that = @
     triggerElement = trigger.emitElement
-    element = @queryElement triggerElement
-    console.log "!!! setTriggerElementEvent element", element
+    elements = @queryElement triggerElement
+    console.log "!!! setTriggerElementEvent element", elements
 
-    element.addEventListener "click.adMiner", () ->
-      that.process trigger, that.touchAdMinerEvent
+    _.forEach elements, (element) ->
+      element.addEventListener "click", () ->
+        that.process.call that, trigger, that.touchAdMinerEvent
 
 
 
@@ -137,7 +138,7 @@ class TRM
       @pmdReturnData.price = totalPrice
       @pmdReturnData.currency = trigger.currency
 
-    if _.isFunction callback then callback()
+    if _.isFunction callback then callback.call(that)
 
 
 

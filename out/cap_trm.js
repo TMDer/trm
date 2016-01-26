@@ -81,14 +81,16 @@ TRM = (function() {
   };
 
   TRM.prototype.setTriggerElementEvent = function(trigger) {
-    var element, that, triggerElement;
+    var elements, that, triggerElement;
     console.log("!!! setTriggerElementEvent");
     that = this;
     triggerElement = trigger.emitElement;
-    element = this.queryElement(triggerElement);
-    console.log("!!! setTriggerElementEvent element", element);
-    return element.addEventListener("click.adMiner", function() {
-      return that.process(trigger, that.touchAdMinerEvent);
+    elements = this.queryElement(triggerElement);
+    console.log("!!! setTriggerElementEvent element", elements);
+    return _.forEach(elements, function(element) {
+      return element.addEventListener("click", function() {
+        return that.process.call(that, trigger, that.touchAdMinerEvent);
+      });
     });
   };
 
@@ -139,7 +141,7 @@ TRM = (function() {
       this.pmdReturnData.currency = trigger.currency;
     }
     if (_.isFunction(callback)) {
-      return callback();
+      return callback.call(that);
     }
   };
 
