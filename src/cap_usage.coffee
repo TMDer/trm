@@ -19,7 +19,6 @@
       t.src = '//connect.facebook.net/en_US/fbevents.js'
       s = document.getElementsByTagName(e)[0];
       s.parentNode.insertBefore(t, s)
-      console.log "!!! initFbq"
 
     load: (callback) ->
       unless window.fbq
@@ -34,7 +33,6 @@
 
         n = document.getElementsByTagName("script")[0]
         n.parentNode.insertBefore a, n
-        console.log "!!! initPmd"
 
       event = window.onload
       window.onload = ->

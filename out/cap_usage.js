@@ -21,8 +21,7 @@
       t.async = !0;
       t.src = '//connect.facebook.net/en_US/fbevents.js';
       s = document.getElementsByTagName(e)[0];
-      s.parentNode.insertBefore(t, s);
-      return console.log("!!! initFbq");
+      return s.parentNode.insertBefore(t, s);
     },
     load: function(callback) {
       var a, event, n;
@@ -37,7 +36,6 @@
         a.src = ("https:" === document.location.protocol ? "https://" : "http://") + "{ENV_PATH}";
         n = document.getElementsByTagName("script")[0];
         n.parentNode.insertBefore(a, n);
-        console.log("!!! initPmd");
       }
       event = window.onload;
       window.onload = function() {
