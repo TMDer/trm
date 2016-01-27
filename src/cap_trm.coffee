@@ -90,18 +90,9 @@ class TRM
 
     that = @
     elementsObj = trigger.elementsObj
-    data =
-      triggerEventId: trigger.id
 
-    _.forEach elementsObj, (element, key) ->
-      e = that.queryElement element
-      if _.isArrayLikeObject e
-        e = _.map e, (obj) ->
-          return obj.innerText
-        data[key] = e
-        return
-      if e
-        data[key] = e.innerText
+    data = @collectElementsData elementsObj
+    data.triggerEventId = trigger.id
 
     triggerTarget = trigger.triggerTarget
     fbDataArray = @transformData triggerTarget, data
@@ -133,6 +124,25 @@ class TRM
       totalPrice = totalPrices[0]
       @pmdReturnData.price = totalPrice
       @pmdReturnData.currency = @data.currency
+
+
+
+  collectElementsData: (elementsObj) ->
+
+    that = this
+    data = {}
+
+    _.forEach elementsObj, (element, key) ->
+      e = that.queryElement element
+      if _.isArrayLikeObject e
+        e = _.map e, (obj) ->
+          return obj.innerText
+        data[key] = e
+        return
+      if e
+        data[key] = e.innerText
+
+    return data
 
 
 
@@ -176,7 +186,7 @@ class TRM
   touchAdMinerEvent: (data = undefined) ->
 
     that = @
-    @params = @_prepareData()
+    @params = @prepareData()
     @params.params = if data then data else @pmdReturnData
 
     try
@@ -205,19 +215,19 @@ class TRM
 
 
 
-  _prepareData: () ->
+  prepareData: () ->
     # it will get params and get params from data, and update cookie
-    param = @_initParams()
+    param = @initParams()
     return param
 
 
 
-  _initParams: () ->
+  initParams: () ->
     # get uuid from cookie
     param = {}
-    uuid = @_getTrmUuid()
+    uuid = @getTrmUuid()
     #get adgroup ID, from local cookie or url params
-    aid = @_getAdGroupId()
+    aid = @getAdGroupId()
 
     # set all param
     param = {
@@ -236,7 +246,7 @@ class TRM
 
 
 
-  _getAdGroupId: (url) ->
+  getAdGroupId: (url) ->
     #get adgroup from url
     url = url || location.search
     url = url.toLowerCase()
@@ -244,7 +254,7 @@ class TRM
     qsFromUrl = search[@KEYS.PARAM_ADGROUP] || ""
 
     if qsFromUrl.length > 0
-      @_setCookie @KEYS.ADGROUP, qsFromUrl
+      @setCookie @KEYS.ADGROUP, qsFromUrl
       return qsFromUrl
 
     aid = cookie.get(@KEYS.ADGROUP) || null
@@ -253,19 +263,19 @@ class TRM
 
 
   #get uuid from cookie, or generate a new uid
-  _getTrmUuid: () ->
+  getTrmUuid: () ->
     uid = cookie.get(@KEYS.ID)
     # create a uid
     unless uid
       uid = uuid.v4()
-      @_setCookie(@KEYS.ID, uid, true)
+      @setCookie(@KEYS.ID, uid, true)
     return uid
 
 
 
   # set cookie and set it is forever or expreis
   # the expires setting is depend on KEYS
-  _setCookie: (key, data, forever) ->
+  setCookie: (key, data, forever) ->
     newDate = new Date()
 
     if forever

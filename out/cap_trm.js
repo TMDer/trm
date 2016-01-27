@@ -48,7 +48,6 @@ TRM = (function() {
 
   TRM.prototype.flow = function() {
     var that, triggers;
-    console.log("!!! flow");
     that = this;
     this.initFacebookPixel();
     this.touchFacebookEvent(["track", "PageView"]);
@@ -57,7 +56,6 @@ TRM = (function() {
     triggers = this.data.triggers;
     _.forEach(triggers, function(trigger) {
       var currentUrl;
-      console.log("!!! flow trigger", trigger);
       switch (trigger.triggerType) {
         case "Element":
           return that.setTriggerElementEvent(trigger);
@@ -73,7 +71,6 @@ TRM = (function() {
   };
 
   TRM.prototype.initFacebookPixel = function() {
-    console.log("!!! initFacebookPixel");
     return this.touchFacebookEvent(["init", "{FB_PIXEL_ID}"]);
   };
 
@@ -83,11 +80,9 @@ TRM = (function() {
 
   TRM.prototype.setTriggerElementEvent = function(trigger) {
     var elements, that, triggerElement;
-    console.log("!!! setTriggerElementEvent");
     that = this;
     triggerElement = trigger.emitElement;
     elements = this.queryElement(triggerElement);
-    console.log("!!! setTriggerElementEvent element", elements);
     return _.forEach(elements, function(element) {
       return element.addEventListener("click", function() {
         return that.process.call(that, trigger, that.touchAdMinerEvent);
@@ -97,13 +92,42 @@ TRM = (function() {
 
   TRM.prototype.process = function(trigger, callback) {
     var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, step, that, totalPrice, totalPrices, triggerTarget;
-    console.log("!!! process");
     that = this;
     elementsObj = trigger.elementsObj;
-    data = {
-      triggerEventId: trigger.id
-    };
-    console.log("!!! elements to collect", elementsObj);
+    data = this.collectElementsData(elementsObj);
+    data.triggerEventId = trigger.id;
+    triggerTarget = trigger.triggerTarget;
+    fbDataArray = this.transformData(triggerTarget, data);
+    if (fbDataArray[1] === "CheckoutFlow") {
+      step = trigger.emitStep;
+      triggerTarget = triggerTarget + step;
+      fbDataArray[1] = fbDataArray[1] + step;
+      if (step === 1) {
+        fbDataForInitiateCheckout = ["track", "InitiateCheckout"];
+        fbDataForInitiateCheckout.push(fbDataArray[2]);
+        this.touchFacebookEvent(fbDataForInitiateCheckout);
+      }
+    }
+    this.touchFacebookEvent(fbDataArray);
+    if (_.isFunction(callback)) {
+      eventData = _.cloneDeep(this.info);
+      eventData[triggerTarget] = data;
+      callback.call(that, eventData);
+      return;
+    }
+    this.pmdReturnData[triggerTarget] = data;
+    totalPrices = data.totalPrices;
+    if (totalPrices && totalPrices[0]) {
+      totalPrice = totalPrices[0];
+      this.pmdReturnData.price = totalPrice;
+      return this.pmdReturnData.currency = this.data.currency;
+    }
+  };
+
+  TRM.prototype.collectElementsData = function(elementsObj) {
+    var data, that;
+    that = this;
+    data = {};
     _.forEach(elementsObj, function(element, key) {
       var e;
       e = that.queryElement(element);
@@ -118,36 +142,7 @@ TRM = (function() {
         return data[key] = e.innerText;
       }
     });
-    console.log("!!! collect elements data", data);
-    triggerTarget = trigger.triggerTarget;
-    fbDataArray = this.transformData(triggerTarget, data);
-    if (fbDataArray[1] === "CheckoutFlow") {
-      step = trigger.emitStep;
-      triggerTarget = triggerTarget + step;
-      fbDataArray[1] = fbDataArray[1] + step;
-      if (step === 1) {
-        fbDataForInitiateCheckout = ["track", "InitiateCheckout"];
-        fbDataForInitiateCheckout.push(fbDataArray[2]);
-        console.log("!!! fbDataForInitiateCheckout", fbDataForInitiateCheckout);
-        this.touchFacebookEvent(fbDataForInitiateCheckout);
-      }
-    }
-    console.log("!!! fbDataArray", fbDataArray);
-    this.touchFacebookEvent(fbDataArray);
-    if (_.isFunction(callback)) {
-      eventData = _.cloneDeep(this.info);
-      console.log("!!! eventData", eventData);
-      eventData[triggerTarget] = data;
-      callback.call(that, eventData);
-      return;
-    }
-    this.pmdReturnData[triggerTarget] = data;
-    totalPrices = data.totalPrices;
-    if (totalPrices && totalPrices[0]) {
-      totalPrice = totalPrices[0];
-      this.pmdReturnData.price = totalPrice;
-      return this.pmdReturnData.currency = trigger.currency;
-    }
+    return data;
   };
 
   TRM.prototype.transformData = function(adMinerTarget, data) {
@@ -158,7 +153,6 @@ TRM = (function() {
     targetMap = _.find(this.targetTable, function(targetObj, key) {
       return key === adMinerTarget;
     });
-    console.log("!!! targetMap", targetMap);
     fieldMap = targetMap.fields;
     _.forEach(data, function(value, key) {
       fbData[fieldMap[key]] = value;
@@ -172,7 +166,6 @@ TRM = (function() {
         }
       });
     }
-    console.log("!!! fbData", fbData);
     return [targetMap.facebookEventType, targetMap.facebookTarget, fbData];
   };
 
@@ -196,9 +189,8 @@ TRM = (function() {
     if (data == null) {
       data = void 0;
     }
-    console.log("!!! data", data);
     that = this;
-    this.params = this._prepareData();
+    this.params = this.prepareData();
     this.params.params = data ? data : this.pmdReturnData;
     try {
       return request({
@@ -225,17 +217,17 @@ TRM = (function() {
     return protocol + "//" + url;
   };
 
-  TRM.prototype._prepareData = function() {
+  TRM.prototype.prepareData = function() {
     var param;
-    param = this._initParams();
+    param = this.initParams();
     return param;
   };
 
-  TRM.prototype._initParams = function() {
+  TRM.prototype.initParams = function() {
     var aid, param;
     param = {};
-    uuid = this._getTrmUuid();
-    aid = this._getAdGroupId();
+    uuid = this.getTrmUuid();
+    aid = this.getAdGroupId();
     param = {
       trackPixelId: this.id || 0,
       adGroupId: aid || 0,
@@ -246,31 +238,31 @@ TRM = (function() {
     return param;
   };
 
-  TRM.prototype._getAdGroupId = function(url) {
+  TRM.prototype.getAdGroupId = function(url) {
     var aid, qsFromUrl, search;
     url = url || location.search;
     url = url.toLowerCase();
     search = qs.parse(url) || null;
     qsFromUrl = search[this.KEYS.PARAM_ADGROUP] || "";
     if (qsFromUrl.length > 0) {
-      this._setCookie(this.KEYS.ADGROUP, qsFromUrl);
+      this.setCookie(this.KEYS.ADGROUP, qsFromUrl);
       return qsFromUrl;
     }
     aid = cookie.get(this.KEYS.ADGROUP) || null;
     return aid;
   };
 
-  TRM.prototype._getTrmUuid = function() {
+  TRM.prototype.getTrmUuid = function() {
     var uid;
     uid = cookie.get(this.KEYS.ID);
     if (!uid) {
       uid = uuid.v4();
-      this._setCookie(this.KEYS.ID, uid, true);
+      this.setCookie(this.KEYS.ID, uid, true);
     }
     return uid;
   };
 
-  TRM.prototype._setCookie = function(key, data, forever) {
+  TRM.prototype.setCookie = function(key, data, forever) {
     var newDate;
     newDate = new Date();
     if (forever) {
