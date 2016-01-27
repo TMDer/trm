@@ -42,7 +42,7 @@ TRM = (function() {
 
   TRM.prototype.setNGo = function(info) {
     this.info = info;
-    this.pmdReturnData = info;
+    this.pmdReturnData = _.cloneDeep(info);
     return this.flow();
   };
 
@@ -136,6 +136,7 @@ TRM = (function() {
     this.touchFacebookEvent(fbDataArray);
     if (_.isFunction(callback)) {
       eventData = _.cloneDeep(this.info);
+      console.log("!!! eventData", eventData);
       eventData[triggerTarget] = data;
       callback.call(that, eventData);
       return;
@@ -160,7 +161,8 @@ TRM = (function() {
     console.log("!!! targetMap", targetMap);
     fieldMap = targetMap.fields;
     _.forEach(data, function(value, key) {
-      return fbData[fieldMap[key]] = value;
+      fbData[fieldMap[key]] = value;
+      return delete fbData["undefined"];
     });
     otherFields = targetMap.otherFields;
     if (otherFields) {

@@ -35,7 +35,7 @@ class TRM
   setNGo: (info) ->
     # info: {email: "xxx"}
     @info = info
-    @pmdReturnData = info
+    @pmdReturnData = _.cloneDeep info
     @flow()
 
 
@@ -132,6 +132,7 @@ class TRM
 
     if _.isFunction callback
       eventData = _.cloneDeep @info
+      console.log "!!! eventData", eventData
       eventData[triggerTarget] = data
       callback.call that, eventData
       return
@@ -176,6 +177,7 @@ class TRM
     _.forEach data, (value, key) ->
       # "3C", "productCategory"
       fbData[fieldMap[key]] = value
+      delete fbData["undefined"]
 
     otherFields = targetMap.otherFields
 
@@ -190,21 +192,6 @@ class TRM
     console.log "!!! fbData", fbData
 
     return [targetMap.facebookEventType, targetMap.facebookTarget, fbData]
-
-
-
-  # collectData: (element, key) ->
-
-  #   # data = {}
-  #   e = that.queryElement element
-  #   if _.isArrayLikeObject e
-  #     e = _.map e, (obj) ->
-  #       return obj.innerText
-  #     return {"#{key}": e}
-  #   else if e
-  #     return {"#{key}": e.innerText}
-  #   else
-  #     return null
 
 
 
