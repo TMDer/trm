@@ -41,7 +41,7 @@ class TRM
 
 
   flow: () ->
-    console.log "!!! flow"
+
     that = @
     @initFacebookPixel()
     @touchFacebookEvent ["track", "PageView"]
@@ -50,7 +50,6 @@ class TRM
     triggers = @data.triggers
 
     _.forEach triggers, (trigger) ->
-      console.log "!!! flow trigger", trigger
       switch trigger.triggerType
         when "Element"
           that.setTriggerElementEvent trigger
@@ -64,7 +63,7 @@ class TRM
 
 
   initFacebookPixel: () ->
-    console.log "!!! initFacebookPixel"
+
     @touchFacebookEvent ["init", "{FB_PIXEL_ID}"]
 
 
@@ -76,11 +75,10 @@ class TRM
 
 
   setTriggerElementEvent: (trigger) ->
-    console.log "!!! setTriggerElementEvent"
+
     that = @
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
-    console.log "!!! setTriggerElementEvent element", elements
 
     _.forEach elements, (element) ->
       element.addEventListener "click", () ->
@@ -89,13 +87,11 @@ class TRM
 
 
   process: (trigger, callback) ->
-    console.log "!!! process"
+
     that = @
     elementsObj = trigger.elementsObj
     data =
       triggerEventId: trigger.id
-
-    console.log "!!! elements to collect", elementsObj
 
     _.forEach elementsObj, (element, key) ->
       e = that.queryElement element
@@ -107,32 +103,24 @@ class TRM
       if e
         data[key] = e.innerText
 
-    # data = {
-    #   productCategory: "3C",
-    #   productName: "MAC Book"
-    # }
-    console.log "!!! collect elements data", data
-
     triggerTarget = trigger.triggerTarget
     fbDataArray = @transformData triggerTarget, data
 
+    # If CheckoutFlow, touch CheckoutFlow + emitStep
     if fbDataArray[1] is "CheckoutFlow"
       step = trigger.emitStep
       triggerTarget = triggerTarget + step
       fbDataArray[1] = fbDataArray[1] + step
+      # If emitStep is 1, touch InitiateCheckout as well
       if step is 1
         fbDataForInitiateCheckout = ["track", "InitiateCheckout"]
         fbDataForInitiateCheckout.push fbDataArray[2]
-        console.log "!!! fbDataForInitiateCheckout", fbDataForInitiateCheckout
         @touchFacebookEvent fbDataForInitiateCheckout
-
-    console.log "!!! fbDataArray", fbDataArray
 
     @touchFacebookEvent fbDataArray
 
     if _.isFunction callback
       eventData = _.cloneDeep @info
-      console.log "!!! eventData", eventData
       eventData[triggerTarget] = data
       callback.call that, eventData
       return
@@ -144,16 +132,11 @@ class TRM
     if totalPrices and totalPrices[0]
       totalPrice = totalPrices[0]
       @pmdReturnData.price = totalPrice
-      @pmdReturnData.currency = trigger.currency
+      @pmdReturnData.currency = @data.currency
 
 
 
   transformData: (adMinerTarget, data) ->
-
-    # data = {
-    #   productCategory: "3C",
-    #   productName: "MAC Book"
-    # }
 
     that = @
     fbData = {}
@@ -161,21 +144,9 @@ class TRM
     targetMap = _.find @targetTable, (targetObj, key) ->
       return key is adMinerTarget
 
-    # targetMap = {
-    #   facebookEventType: "trackCustom",
-    #   facebookTarget: "Product",
-    #   fields: {
-    #     "productCategories": "content_category",
-    #     "productNames": "content_name",
-    #   },
-    #   // otherFields: ["currency"]
-    # }
-    console.log "!!! targetMap", targetMap
-
     fieldMap = targetMap.fields
 
     _.forEach data, (value, key) ->
-      # "3C", "productCategory"
       fbData[fieldMap[key]] = value
       delete fbData["undefined"]
 
@@ -184,12 +155,6 @@ class TRM
     if otherFields
       _.forEach otherFields, (field) ->
         if field is "currency" then fbData.currency = that.data.currency
-
-    # fbData = {
-    #   content_category: "3C",
-    #   content_name: "MAC Book"
-    # }
-    console.log "!!! fbData", fbData
 
     return [targetMap.facebookEventType, targetMap.facebookTarget, fbData]
 
@@ -209,8 +174,6 @@ class TRM
 
 
   touchAdMinerEvent: (data = undefined) ->
-
-    console.log "!!! data", data
 
     that = @
     @params = @_prepareData()
