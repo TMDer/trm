@@ -21,6 +21,7 @@ _ = require("lodash");
 TRM = (function() {
   function TRM() {
     this.host = "{DOMAIN_NAME}/track";
+    this.fbPixelId = "";
     this.data = {
       PIXEL_DATA: PIXEL_DATA
     };
@@ -71,11 +72,27 @@ TRM = (function() {
   };
 
   TRM.prototype.initFacebookPixel = function() {
+    this.fbPixelId = "{FB_PIXEL_ID}";
+    if (!this.hasFbPixelId()) {
+      return;
+    }
     return this.touchFacebookEvent(["init", "{FB_PIXEL_ID}"]);
   };
 
   TRM.prototype.touchFacebookEvent = function(dataArray) {
+    if (!this.hasFbPixelId()) {
+      return;
+    }
     return fbq.apply(null, dataArray);
+  };
+
+  TRM.prototype.hasFbPixelId = function() {
+    var fbPixelId;
+    fbPixelId = this.fbPixelId;
+    if ((!fbPixelId) || (fbPixelId === "null")) {
+      return false;
+    }
+    return true;
   };
 
   TRM.prototype.setTriggerElementEvent = function(trigger) {

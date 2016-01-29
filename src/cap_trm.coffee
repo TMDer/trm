@@ -16,6 +16,7 @@ class TRM
   constructor: () ->
 
     @host = "{DOMAIN_NAME}/track"
+    @fbPixelId = "";
     @data = {PIXEL_DATA}
     @targetTable = {TARGET_DATA}
     @pmdReturnData = {}
@@ -28,6 +29,7 @@ class TRM
       FOREVER: 9999999999
       AUDIENCETAGID: "pmd-tag-aid"
     }
+
     return @
 
 
@@ -64,13 +66,30 @@ class TRM
 
   initFacebookPixel: () ->
 
+    this.fbPixelId = "{FB_PIXEL_ID}"
+
+    if not this.hasFbPixelId()
+      return
+
     @touchFacebookEvent ["init", "{FB_PIXEL_ID}"]
 
 
 
   touchFacebookEvent: (dataArray) ->
     # https://developers.facebook.com/docs/marketing-api/facebook-pixel/v2.5#standardevents
+    if not this.hasFbPixelId()
+      return
+
     fbq.apply null, dataArray
+
+
+
+  hasFbPixelId : () ->
+
+    fbPixelId = this.fbPixelId
+    if (not fbPixelId) or (fbPixelId is "null")
+      return false
+    return true
 
 
 
