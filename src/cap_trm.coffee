@@ -83,8 +83,8 @@ class TRM
   hasFbPixelId : () ->
 
     if this.fbPixelId is "{FB_PIXEL_ID}"
-      return false
-    return true
+      return true
+    return false
 
 
 

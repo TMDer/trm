@@ -87,9 +87,9 @@ TRM = (function() {
 
   TRM.prototype.hasFbPixelId = function() {
     if (this.fbPixelId === "{FB_PIXEL_ID}") {
-      return false;
+      return true;
     }
-    return true;
+    return false;
   };
 
   TRM.prototype.setTriggerElementEvent = function(trigger) {
