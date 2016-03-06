@@ -195,7 +195,7 @@ TRM = (function() {
     if (elementWithQueryInfo.name) {
       return document.getElementsByName(elementWithQueryInfo.name);
     }
-    return document.querySelectorAll(elementWithQueryInfo.custom);
+    return document.querySelectorAll(elementWithQueryInfo.customSelection);
   };
 
   TRM.prototype.touchAdMinerEvent = function(data) {

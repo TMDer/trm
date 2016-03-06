@@ -193,7 +193,7 @@ class TRM
       return document.getElementsByClassName elementWithQueryInfo.class
     if elementWithQueryInfo.name
       return document.getElementsByName elementWithQueryInfo.name
-    return document.querySelectorAll elementWithQueryInfo.custom
+    return document.querySelectorAll elementWithQueryInfo.customSelection
 
 
 
