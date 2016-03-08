@@ -27,14 +27,15 @@ module.exports = exports = {
   resultDisplay: function(_arg) {
     var aid, code, pid;
     code = _arg.code, pid = _arg.pid, aid = _arg.aid;
+    console.log("!!! code", code);
+    code = code.replace("{ENV_PATH:ENV_PATH}", this.optUrl + pid);
+    console.log("!!! code", code);
     return code + "window.analytics.load(function () {\n  window.analytics.setNGo({\"email\": \"aaa@bbb.cc\"});\n});";
   },
   compress: function(filepath, opt) {
     var code, file, result;
     filepath = filepath || path.join(__dirname, "./cap_usage.js");
-    optUrl = opt || optUrl;
     file = fs.readFileSync(filepath, "utf8");
-    file = file.replace("{ENV_PATH}", optUrl);
     file = file.replace("{VERSION}", VERSION);
     code = file;
     result = this.compressContent(code);
