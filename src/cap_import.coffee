@@ -31,6 +31,11 @@ module.exports = exports = {
     #   });
     # """
 
+    # add pid
+    console.log "!!! code", code
+    code = code.replace "{ENV_PATH:ENV_PATH}", @optUrl + pid
+    console.log "!!! code", code
+
     return code + """
       window.analytics.load(function () {
         window.analytics.setNGo({"email": "aaa@bbb.cc"});
@@ -39,13 +44,13 @@ module.exports = exports = {
 
   compress: (filepath, opt) ->
     filepath = filepath || path.join(__dirname, "./cap_usage.js")
-    optUrl = opt || optUrl
+    # optUrl = opt || @optUrl
 
     file = fs.readFileSync filepath, "utf8"
-    file = file.replace("{ENV_PATH}", optUrl)
-    file = file.replace("{VERSION}", VERSION)
+    # file = file.replace("{ENV_PATH}", optUrl)
+    file = file.replace "{VERSION}", VERSION
     code = file
-    result = @.compressContent(code)
+    result = @.compressContent code
     return result
 
   # For Tracker generating custom trm
