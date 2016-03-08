@@ -33,7 +33,7 @@ module.exports = exports = {
 
     # add pid
     console.log "!!! code", code
-    code = code.replace "{ENV_PATH:ENV_PATH}", @optUrl + pid
+    code = code.replace /{ENV_PATH}/g, @optUrl + pid
     console.log "!!! code", code
 
     return code + """

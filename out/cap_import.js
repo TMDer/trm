@@ -28,7 +28,7 @@ module.exports = exports = {
     var aid, code, pid;
     code = _arg.code, pid = _arg.pid, aid = _arg.aid;
     console.log("!!! code", code);
-    code = code.replace("{ENV_PATH:ENV_PATH}", this.optUrl + pid);
+    code = code.replace(/{ENV_PATH}/g, this.optUrl + pid);
     console.log("!!! code", code);
     return code + "window.analytics.load(function () {\n  window.analytics.setNGo({\"email\": \"aaa@bbb.cc\"});\n});";
   },
