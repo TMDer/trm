@@ -20,21 +20,9 @@ module.exports = exports = {
 
   optUrl: optUrl
 
-
-  
   resultDisplay: ({code, pid, aid}) ->
-    
-    # return code + """
-    #   window.analytics.load(function () {
-    #     window.analytics.initial("#{pid}", "#{aid}");
-    #     window.analytics.send("");
-    #   });
-    # """
 
-    # add pid
-    console.log "!!! code", code
     code = code.replace /{ENV_PATH}/g, @optUrl + pid
-    console.log "!!! code", code
 
     return code + """
       window.analytics.load(function () {
@@ -44,14 +32,14 @@ module.exports = exports = {
 
   compress: (filepath, opt) ->
     filepath = filepath || path.join(__dirname, "./cap_usage.js")
-    # optUrl = opt || @optUrl
 
     file = fs.readFileSync filepath, "utf8"
-    # file = file.replace("{ENV_PATH}", optUrl)
     file = file.replace "{VERSION}", VERSION
     code = file
     result = @.compressContent code
     return result
+
+
 
   # For Tracker generating custom trm
   generateLib: (config) ->
@@ -82,12 +70,8 @@ module.exports = exports = {
 
         resolve(file)
 
-
-
   compressContent: (content) ->
     return UglifyJS.minify(content, {fromString: true})
-
-  
 
   saveFile: (destPath, content) ->
     return fs.writeFileSync(destPath, content)

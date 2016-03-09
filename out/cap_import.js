@@ -27,9 +27,7 @@ module.exports = exports = {
   resultDisplay: function(_arg) {
     var aid, code, pid;
     code = _arg.code, pid = _arg.pid, aid = _arg.aid;
-    console.log("!!! code", code);
     code = code.replace(/{ENV_PATH}/g, this.optUrl + pid);
-    console.log("!!! code", code);
     return code + "window.analytics.load(function () {\n  window.analytics.setNGo({\"email\": \"aaa@bbb.cc\"});\n});";
   },
   compress: function(filepath, opt) {
