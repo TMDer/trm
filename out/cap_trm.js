@@ -187,7 +187,10 @@ TRM = (function() {
     var element;
     if (elementWithQueryInfo.id) {
       element = document.getElementById(elementWithQueryInfo.id);
-      return [element];
+      if (element) {
+        return [element];
+      }
+      return [];
     }
     if (elementWithQueryInfo["class"]) {
       return document.getElementsByClassName(elementWithQueryInfo["class"]);
