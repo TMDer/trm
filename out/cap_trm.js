@@ -185,6 +185,9 @@ TRM = (function() {
 
   TRM.prototype.queryElement = function(elementWithQueryInfo) {
     var element;
+    if (!elementWithQueryInfo) {
+      return null;
+    }
     if (elementWithQueryInfo.id) {
       element = document.getElementById(elementWithQueryInfo.id);
       if (element) {

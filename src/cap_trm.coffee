@@ -186,6 +186,8 @@ class TRM
 
   queryElement: (elementWithQueryInfo) ->
 
+    return null unless elementWithQueryInfo
+
     if elementWithQueryInfo.id
       element = document.getElementById elementWithQueryInfo.id
       return [element] if element
