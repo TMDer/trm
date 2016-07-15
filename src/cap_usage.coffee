@@ -37,7 +37,7 @@
       event = window.onload
       window.onload = ->
         event()  if event
-        callback()
+        callback() if callback and ({}.toString.call(callback) is '[object Function]')
 
       return
 

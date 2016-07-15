@@ -42,7 +42,9 @@
         if (event) {
           event();
         }
-        return callback();
+        if (callback && ({}.toString.call(callback) === '[object Function]')) {
+          return callback();
+        }
       };
     },
     VERSION: "{VERSION}"
