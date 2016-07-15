@@ -2,7 +2,7 @@
 # record, user data
 */
 
-var TRM, VERSION, cookie, global, qs, request, url, uuid, _;
+var TRM, VERSION, cookie, global, qs, request, url, uuid, _lodash;
 
 request = require('browser-request');
 
@@ -16,7 +16,7 @@ uuid = require('node-uuid');
 
 VERSION = require("../package.json").version;
 
-_ = require("lodash");
+_lodash = require("lodash");
 
 TRM = (function() {
   function TRM() {
@@ -43,7 +43,7 @@ TRM = (function() {
 
   TRM.prototype.setNGo = function(info) {
     this.info = info;
-    this.pmdReturnData = _.cloneDeep(info);
+    this.pmdReturnData = _lodash.cloneDeep(info);
     return this.flow();
   };
 
@@ -55,7 +55,7 @@ TRM = (function() {
     this.touchFacebookEvent(["track", "ViewContent"]);
     this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
-    _.forEach(triggers, function(trigger) {
+    _lodash.forEach(triggers, function(trigger) {
       var currentUrl;
       switch (trigger.triggerType) {
         case "Element":
@@ -97,7 +97,7 @@ TRM = (function() {
     that = this;
     triggerElement = trigger.emitElement;
     elements = this.queryElement(triggerElement);
-    return _.forEach(elements, function(element) {
+    return _lodash.forEach(elements, function(element) {
       return element.addEventListener("click", function() {
         return that.process.call(that, trigger, that.touchAdMinerEvent);
       });
@@ -123,8 +123,8 @@ TRM = (function() {
       }
     }
     this.touchFacebookEvent(fbDataArray);
-    if (_.isFunction(callback)) {
-      eventData = _.cloneDeep(this.info);
+    if (_lodash.isFunction(callback)) {
+      eventData = _lodash.cloneDeep(this.info);
       eventData[triggerTarget] = data;
       callback.call(that, eventData);
       return;
@@ -142,11 +142,11 @@ TRM = (function() {
     var data, that;
     that = this;
     data = {};
-    _.forEach(elementsObj, function(element, key) {
+    _lodash.forEach(elementsObj, function(element, key) {
       var e;
       e = that.queryElement(element);
-      if (_.isArrayLikeObject(e)) {
-        e = _.map(e, function(obj) {
+      if (_lodash.isArrayLikeObject(e)) {
+        e = _lodash.map(e, function(obj) {
           return obj.innerText;
         });
         data[key] = e;
@@ -164,17 +164,17 @@ TRM = (function() {
     that = this;
     fbData = {};
     returnFbDataArray = [];
-    targetMap = _.find(this.targetTable, function(targetObj, key) {
+    targetMap = _lodash.find(this.targetTable, function(targetObj, key) {
       return key === adMinerTarget;
     });
     fieldMap = targetMap.fields;
-    _.forEach(data, function(value, key) {
+    _lodash.forEach(data, function(value, key) {
       fbData[fieldMap[key]] = value;
       return delete fbData["undefined"];
     });
     otherFields = targetMap.otherFields;
     if (otherFields) {
-      _.forEach(otherFields, function(field) {
+      _lodash.forEach(otherFields, function(field) {
         if (field === "currency") {
           return fbData.currency = that.data.currency;
         }

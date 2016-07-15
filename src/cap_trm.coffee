@@ -7,7 +7,7 @@ url = require("url")
 qs = require("querystring")
 uuid = require('node-uuid')
 VERSION = require("../package.json").version
-_ = require("lodash")
+_lodash = require("lodash")
 
 
 
@@ -37,7 +37,7 @@ class TRM
   setNGo: (info) ->
     # info: {email: "xxx"}
     @info = info
-    @pmdReturnData = _.cloneDeep info
+    @pmdReturnData = _lodash.cloneDeep info
     @flow()
 
 
@@ -51,7 +51,7 @@ class TRM
     @id = @data.trackPixelId
     triggers = @data.triggers
 
-    _.forEach triggers, (trigger) ->
+    _lodash.forEach triggers, (trigger) ->
       switch trigger.triggerType
         when "Element"
           that.setTriggerElementEvent trigger
@@ -94,7 +94,7 @@ class TRM
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
 
-    _.forEach elements, (element) ->
+    _lodash.forEach elements, (element) ->
       element.addEventListener "click", () ->
         that.process.call that, trigger, that.touchAdMinerEvent
 
@@ -124,8 +124,8 @@ class TRM
 
     @touchFacebookEvent fbDataArray
 
-    if _.isFunction callback
-      eventData = _.cloneDeep @info
+    if _lodash.isFunction callback
+      eventData = _lodash.cloneDeep @info
       eventData[triggerTarget] = data
       callback.call that, eventData
       return
@@ -146,10 +146,10 @@ class TRM
     that = this
     data = {}
 
-    _.forEach elementsObj, (element, key) ->
+    _lodash.forEach elementsObj, (element, key) ->
       e = that.queryElement element
-      if _.isArrayLikeObject e
-        e = _.map e, (obj) ->
+      if _lodash.isArrayLikeObject e
+        e = _lodash.map e, (obj) ->
           return obj.innerText
         data[key] = e
         return
@@ -165,19 +165,19 @@ class TRM
     that = @
     fbData = {}
     returnFbDataArray = []
-    targetMap = _.find @targetTable, (targetObj, key) ->
+    targetMap = _lodash.find @targetTable, (targetObj, key) ->
       return key is adMinerTarget
 
     fieldMap = targetMap.fields
 
-    _.forEach data, (value, key) ->
+    _lodash.forEach data, (value, key) ->
       fbData[fieldMap[key]] = value
       delete fbData["undefined"]
 
     otherFields = targetMap.otherFields
 
     if otherFields
-      _.forEach otherFields, (field) ->
+      _lodash.forEach otherFields, (field) ->
         if field is "currency" then fbData.currency = that.data.currency
 
     return [targetMap.facebookEventType, targetMap.facebookTarget, fbData]
