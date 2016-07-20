@@ -8,6 +8,7 @@ qs = require("querystring")
 uuid = require('node-uuid')
 VERSION = require("../package.json").version
 _lodash = require("lodash")
+_lodash = _lodash.noConflict()
 
 
 
