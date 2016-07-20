@@ -18,6 +18,8 @@ VERSION = require("../package.json").version;
 
 _lodash = require("lodash");
 
+_lodash = _lodash.noConflict();
+
 TRM = (function() {
   function TRM() {
     this.host = "{DOMAIN_NAME}/track";
