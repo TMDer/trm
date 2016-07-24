@@ -21,6 +21,7 @@ class TRM
     @data = {PIXEL_DATA}
     @targetTable = {TARGET_DATA}
     @pmdReturnData = {}
+    @isInitHashChangeEvent = false
     @KEYS = {
       ID: "pmd.uuid"
       ADGROUP: "pmd.adGroupId"
@@ -40,8 +41,20 @@ class TRM
     @info = info
     @pmdReturnData = _lodash.cloneDeep info
     @flow()
+    @bindHashChangeEvent(info)
 
 
+
+  bindHashChangeEvent: (info) ->
+    if @isInitHashChangeEvent
+      return
+
+    @isInitHashChangeEvent = true
+    onhashchangeEvent = window.onhashchange
+    window.onhashchange = ->
+      onhashchangeEvent() if onhashchangeEvent
+      @setNGo(info)
+    return
 
   flow: () ->
 
