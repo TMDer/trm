@@ -58,17 +58,18 @@ TRM = (function() {
   };
 
   TRM.prototype.bindHashChangeEvent = function(info) {
-    var onhashchangeEvent;
+    var onhashchangeEvent, trmFlow;
     if (this.isInitHashChangeEvent) {
       return;
     }
     this.isInitHashChangeEvent = true;
     onhashchangeEvent = window.onhashchange;
+    trmFlow = this.setNGo;
     window.onhashchange = function() {
       if (onhashchangeEvent) {
         onhashchangeEvent();
       }
-      return this.setNGo(info);
+      return trmFlow(info);
     };
   };
 

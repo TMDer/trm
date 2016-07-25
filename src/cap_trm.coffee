@@ -57,9 +57,10 @@ class TRM
 
     @isInitHashChangeEvent = true
     onhashchangeEvent = window.onhashchange
+    trmFlow = @setNGo
     window.onhashchange = ->
       onhashchangeEvent() if onhashchangeEvent
-      @setNGo(info)
+      trmFlow(info)
     return
 
   checkTrmVersion: (supportTrmVersion) ->
