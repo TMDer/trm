@@ -45,16 +45,25 @@ class TRM
     @flow()
 
     isSupport = @checkTrmVersion(@supportHashChangeTrmVersion)
+    console.log "usage 版本支援 hashchange : #{isSupport}"
+    console.log "是否 bind 過 hashchangeevent : #{@hasInitHashChangeEvent}"
     return if isSupport or @hasInitHashChangeEvent
     @bindHashChangeEvent(info)
 
   bindHashChangeEvent: (info) ->
+    console.log "設定 hashchange event 完畢"
     that = @
     @hasInitHashChangeEvent = true
     onhashchangeEvent = window.onhashchange
     window.onhashchange = ->
+      console.log "onhashchange :: trigger setNGo"
       onhashchangeEvent() if onhashchangeEvent
       that.setNGo.call(that, info)
+
+    onloadEvent = window.onload
+    window.onload = ->
+      console.log "onload :: trigger setNGo"
+      onloadEvent() if onloadEvent
     return
 
   checkTrmVersion: (supportTrmVersion) ->
@@ -72,6 +81,7 @@ class TRM
   flow: () ->
 
     that = @
+    console.log "是否 init 過 @hasInitFacebookPixel ：#{@hasInitFacebookPixel}"
     unless @hasInitFacebookPixel
       @initFacebookPixel()
 

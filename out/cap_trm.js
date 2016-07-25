@@ -52,6 +52,8 @@ TRM = (function() {
     this.pmdReturnData = _lodash.cloneDeep(info);
     this.flow();
     isSupport = this.checkTrmVersion(this.supportHashChangeTrmVersion);
+    console.log("usage 版本支援 hashchange : " + isSupport);
+    console.log("是否 bind 過 hashchangeevent : " + this.hasInitHashChangeEvent);
     if (isSupport || this.hasInitHashChangeEvent) {
       return;
     }
@@ -59,15 +61,24 @@ TRM = (function() {
   };
 
   TRM.prototype.bindHashChangeEvent = function(info) {
-    var onhashchangeEvent, that;
+    var onhashchangeEvent, onloadEvent, that;
+    console.log("設定 hashchange event 完畢");
     that = this;
     this.hasInitHashChangeEvent = true;
     onhashchangeEvent = window.onhashchange;
     window.onhashchange = function() {
+      console.log("onhashchange :: trigger setNGo");
       if (onhashchangeEvent) {
         onhashchangeEvent();
       }
       return that.setNGo.call(that, info);
+    };
+    onloadEvent = window.onload;
+    window.onload = function() {
+      console.log("onload :: trigger setNGo");
+      if (onloadEvent) {
+        return onloadEvent();
+      }
     };
   };
 
@@ -86,6 +97,7 @@ TRM = (function() {
   TRM.prototype.flow = function() {
     var that, triggers;
     that = this;
+    console.log("是否 init 過 @hasInitFacebookPixel ：" + this.hasInitFacebookPixel);
     if (!this.hasInitFacebookPixel) {
       this.initFacebookPixel();
     }
