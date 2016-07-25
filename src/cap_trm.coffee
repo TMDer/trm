@@ -62,7 +62,7 @@ class TRM
       @setNGo(info)
     return
 
-  checkTrmVersion = (supportTrmVersion) ->
+  checkTrmVersion: (supportTrmVersion) ->
     currentTrmVersion = window.analytics.VERSION or "0"
     isSupport = false
 

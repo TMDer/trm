@@ -21,8 +21,6 @@ _lodash = require("lodash");
 _lodash = _lodash.noConflict();
 
 TRM = (function() {
-  var checkTrmVersion;
-
   function TRM() {
     this.host = "{DOMAIN_NAME}/track";
     this.fbPixelId = "{FB_PIXEL_ID}";
@@ -74,7 +72,7 @@ TRM = (function() {
     };
   };
 
-  checkTrmVersion = function(supportTrmVersion) {
+  TRM.prototype.checkTrmVersion = function(supportTrmVersion) {
     var currentTrmVersion, isSupport;
     currentTrmVersion = window.analytics.VERSION || "0";
     isSupport = false;
