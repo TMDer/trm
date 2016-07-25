@@ -22,6 +22,7 @@ class TRM
     @targetTable = {TARGET_DATA}
     @pmdReturnData = {}
     @isInitHashChangeEvent = false
+    @supportHashChangeTrmVersion = 24  #trm v0.2.4
     @KEYS = {
       ID: "pmd.uuid"
       ADGROUP: "pmd.adGroupId"
@@ -41,6 +42,11 @@ class TRM
     @info = info
     @pmdReturnData = _lodash.cloneDeep info
     @flow()
+
+    isSupport = @checkTrmVersion(@supportHashChangeTrmVersion)
+
+    if isSupport
+      return
     @bindHashChangeEvent(info)
 
 
@@ -55,6 +61,18 @@ class TRM
       onhashchangeEvent() if onhashchangeEvent
       @setNGo(info)
     return
+
+  checkTrmVersion = (supportTrmVersion) ->
+    currentTrmVersion = window.analytics.VERSION or "0"
+    isSupport = false
+
+    if currentTrmVersion and supportTrmVersion
+      currentTrmVersion = currentTrmVersion.replace(/\./g, "")
+      currentTrmVersion = parseInt currentTrmVersion
+
+      isSupport = currentTrmVersion >= supportTrmVersion
+
+    return isSupport
 
   flow: () ->
 
@@ -321,7 +339,7 @@ class TRM
 
 global = window || module.exports
 global.analytics = global.analytics || []
-global.analytics = new TRM()
+global.analytics = _lodash.merge(global.analytics, new TRM())
 global.analytics.host = "{DOMAIN_NAME}/track"
 global.console = global.console || {
   log: (msg) ->

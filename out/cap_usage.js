@@ -24,7 +24,7 @@
       return s.parentNode.insertBefore(t, s);
     },
     load: function(callback) {
-      var a, event, n;
+      var a, n, onhashchangeEvent, onloadEvent;
       if (!window.fbq) {
         this.initFbq();
       }
@@ -37,10 +37,19 @@
         n = document.getElementsByTagName("script")[0];
         n.parentNode.insertBefore(a, n);
       }
-      event = window.onload;
+      onloadEvent = window.onload;
       window.onload = function() {
-        if (event) {
-          event();
+        if (onloadEvent) {
+          onloadEvent();
+        }
+        if (callback && ({}.toString.call(callback) === '[object Function]')) {
+          return callback();
+        }
+      };
+      onhashchangeEvent = window.onhashchange;
+      window.onhashchange = function() {
+        if (onhashchangeEvent) {
+          onhashchangeEvent();
         }
         if (callback && ({}.toString.call(callback) === '[object Function]')) {
           return callback();
