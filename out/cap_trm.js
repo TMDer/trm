@@ -31,7 +31,8 @@ TRM = (function() {
       TARGET_DATA: TARGET_DATA
     };
     this.pmdReturnData = {};
-    this.isInitHashChangeEvent = false;
+    this.hasInitFacebookPixel = false;
+    this.hasInitHashChangeEvent = false;
     this.supportHashChangeTrmVersion = 24;
     this.KEYS = {
       ID: "pmd.uuid",
@@ -51,7 +52,7 @@ TRM = (function() {
     this.pmdReturnData = _lodash.cloneDeep(info);
     this.flow();
     isSupport = this.checkTrmVersion(this.supportHashChangeTrmVersion);
-    if (isSupport) {
+    if (isSupport || this.hasInitHashChangeEvent) {
       return;
     }
     return this.bindHashChangeEvent(info);
@@ -59,11 +60,8 @@ TRM = (function() {
 
   TRM.prototype.bindHashChangeEvent = function(info) {
     var onhashchangeEvent, that;
-    if (this.isInitHashChangeEvent) {
-      return;
-    }
     that = this;
-    this.isInitHashChangeEvent = true;
+    this.hasInitHashChangeEvent = true;
     onhashchangeEvent = window.onhashchange;
     window.onhashchange = function() {
       if (onhashchangeEvent) {
@@ -88,7 +86,9 @@ TRM = (function() {
   TRM.prototype.flow = function() {
     var that, triggers;
     that = this;
-    this.initFacebookPixel();
+    if (!this.hasInitFacebookPixel) {
+      this.initFacebookPixel();
+    }
     this.touchFacebookEvent(["track", "PageView"]);
     this.touchFacebookEvent(["track", "ViewContent"]);
     this.id = this.data.trackPixelId;
@@ -113,7 +113,8 @@ TRM = (function() {
     if (!this.hasFbPixelId()) {
       return;
     }
-    return this.touchFacebookEvent(["init", this.fbPixelId]);
+    this.touchFacebookEvent(["init", this.fbPixelId]);
+    return this.hasInitFacebookPixel = true;
   };
 
   TRM.prototype.touchFacebookEvent = function(dataArray) {

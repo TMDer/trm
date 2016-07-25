@@ -21,7 +21,8 @@ class TRM
     @data = {PIXEL_DATA}
     @targetTable = {TARGET_DATA}
     @pmdReturnData = {}
-    @isInitHashChangeEvent = false
+    @hasInitFacebookPixel = false
+    @hasInitHashChangeEvent = false
     @supportHashChangeTrmVersion = 24  #trm v0.2.4
     @KEYS = {
       ID: "pmd.uuid"
@@ -44,19 +45,12 @@ class TRM
     @flow()
 
     isSupport = @checkTrmVersion(@supportHashChangeTrmVersion)
-
-    if isSupport
-      return
+    return if isSupport or @hasInitHashChangeEvent
     @bindHashChangeEvent(info)
 
-
-
   bindHashChangeEvent: (info) ->
-    if @isInitHashChangeEvent
-      return
-
     that = @
-    @isInitHashChangeEvent = true
+    @hasInitHashChangeEvent = true
     onhashchangeEvent = window.onhashchange
     window.onhashchange = ->
       onhashchangeEvent() if onhashchangeEvent
@@ -78,7 +72,9 @@ class TRM
   flow: () ->
 
     that = @
-    @initFacebookPixel()
+    unless @hasInitFacebookPixel
+      @initFacebookPixel()
+
     @touchFacebookEvent ["track", "PageView"]
     @touchFacebookEvent ["track", "ViewContent"]
     @id = @data.trackPixelId
@@ -102,6 +98,7 @@ class TRM
     return if not this.hasFbPixelId()
 
     @touchFacebookEvent ["init", this.fbPixelId]
+    @hasInitFacebookPixel = true
 
 
 
