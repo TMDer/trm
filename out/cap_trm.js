@@ -96,10 +96,16 @@ TRM = (function() {
     triggers = this.data.triggers;
     console.log("#### setTriggerElementEvent begin");
     _lodash.forEach(triggers, function(trigger) {
-      var currentUrl;
+      var currentUrl, isSuccess;
       switch (trigger.triggerType) {
         case "Element":
-          return that.setTriggerElementEvent(trigger);
+          isSuccess = that.setTriggerElementEvent(trigger);
+          if (!isSuccess) {
+            return setTimeout(function() {
+              return that.setTriggerElementEvent.call(that, trigger);
+            }, 3500);
+          }
+          break;
         case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
@@ -139,18 +145,16 @@ TRM = (function() {
     triggerElement = trigger.emitElement;
     elements = this.queryElement(triggerElement);
     if (elements.length === 0) {
-      setTimeout(function() {
-        return that.setNGo.call(that, this.info);
-      }, 3500);
-      return;
+      return false;
     }
-    return _lodash.forEach(elements, function(element) {
+    _lodash.forEach(elements, function(element) {
       console.log("#### addEventListener :: " + that.touchAdMinerEvent);
       return element.addEventListener("click", function() {
         console.log("#### click :: " + that.touchAdMinerEvent);
         return that.process.call(that, trigger, that.touchAdMinerEvent);
       });
     });
+    return true;
   };
 
   TRM.prototype.process = function(trigger, callback) {
