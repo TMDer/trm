@@ -70,6 +70,7 @@ class TRM
     return isSupport
 
   flow: () ->
+    console.log "#### setNGo flow begin"
 
     that = @
     unless @hasInitFacebookPixel
@@ -80,6 +81,7 @@ class TRM
     @id = @data.trackPixelId
     triggers = @data.triggers
 
+    console.log "#### setTriggerElementEvent begin"
     _lodash.forEach triggers, (trigger) ->
       switch trigger.triggerType
         when "Element"
@@ -119,13 +121,15 @@ class TRM
 
 
   setTriggerElementEvent: (trigger) ->
-
     that = @
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
 
+
     _lodash.forEach elements, (element) ->
+      console.log "#### addEventListener :: #{that.touchAdMinerEvent}"
       element.addEventListener "click", () ->
+        console.log "#### click :: #{that.touchAdMinerEvent}"
         that.process.call that, trigger, that.touchAdMinerEvent
 
 
@@ -140,6 +144,7 @@ class TRM
 
     triggerTarget = trigger.triggerTarget
     fbDataArray = @transformData triggerTarget, data
+    console.log "#### process param :: fbDataArray :: #{fbDataArray.toString()}"
 
     # If CheckoutFlow, touch CheckoutFlow + emitStep
     if fbDataArray[1] is "CheckoutFlow"
