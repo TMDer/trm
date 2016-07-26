@@ -127,7 +127,7 @@ class TRM
 
     if elements.length is 0
       setTimeout( () ->
-        return that.setNGo.call(that, info)
+        return that.setNGo.call(that, @info)
       , 3500)
       return
 

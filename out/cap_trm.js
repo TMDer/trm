@@ -85,6 +85,7 @@ TRM = (function() {
 
   TRM.prototype.flow = function() {
     var that, triggers;
+    console.log("#### setNGo flow begin");
     that = this;
     if (!this.hasInitFacebookPixel) {
       this.initFacebookPixel();
@@ -93,6 +94,7 @@ TRM = (function() {
     this.touchFacebookEvent(["track", "ViewContent"]);
     this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
+    console.log("#### setTriggerElementEvent begin");
     _lodash.forEach(triggers, function(trigger) {
       var currentUrl;
       switch (trigger.triggerType) {
@@ -136,8 +138,16 @@ TRM = (function() {
     that = this;
     triggerElement = trigger.emitElement;
     elements = this.queryElement(triggerElement);
+    if (elements.length === 0) {
+      setTimeout(function() {
+        return that.setNGo.call(that, this.info);
+      }, 3500);
+      return;
+    }
     return _lodash.forEach(elements, function(element) {
+      console.log("#### addEventListener :: " + that.touchAdMinerEvent);
       return element.addEventListener("click", function() {
+        console.log("#### click :: " + that.touchAdMinerEvent);
         return that.process.call(that, trigger, that.touchAdMinerEvent);
       });
     });
@@ -151,6 +161,7 @@ TRM = (function() {
     data.triggerEventId = trigger.id;
     triggerTarget = trigger.triggerTarget;
     fbDataArray = this.transformData(triggerTarget, data);
+    console.log("#### process param :: fbDataArray :: " + (fbDataArray.toString()));
     if (fbDataArray[1] === "CheckoutFlow") {
       step = trigger.emitStep;
       triggerTarget = triggerTarget + step;
