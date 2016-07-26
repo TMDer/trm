@@ -21,6 +21,9 @@ class TRM
     @data = {PIXEL_DATA}
     @targetTable = {TARGET_DATA}
     @pmdReturnData = {}
+    @hasInitFacebookPixel = false
+    @hasInitHashChangeEvent = false
+    @supportHashChangeTrmVersion = 24  #trm v0.2.4
     @KEYS = {
       ID: "pmd.uuid"
       ADGROUP: "pmd.adGroupId"
@@ -41,12 +44,37 @@ class TRM
     @pmdReturnData = _lodash.cloneDeep info
     @flow()
 
+    isSupport = @checkTrmVersion(@supportHashChangeTrmVersion)
+    return if isSupport or @hasInitHashChangeEvent
+    @bindHashChangeEvent(info)
 
+  bindHashChangeEvent: (info) ->
+    that = @
+    @hasInitHashChangeEvent = true
+    onhashchangeEvent = window.onhashchange
+    window.onhashchange = ->
+      onhashchangeEvent() if onhashchangeEvent
+      that.setNGo.call(that, info)
+    return
+
+  checkTrmVersion: (supportTrmVersion) ->
+    currentTrmVersion = window.analytics.VERSION or "0"
+    isSupport = false
+
+    if currentTrmVersion and supportTrmVersion
+      currentTrmVersion = currentTrmVersion.replace(/\./g, "")
+      currentTrmVersion = parseInt currentTrmVersion
+
+      isSupport = currentTrmVersion >= supportTrmVersion
+
+    return isSupport
 
   flow: () ->
 
     that = @
-    @initFacebookPixel()
+    unless @hasInitFacebookPixel
+      @initFacebookPixel()
+
     @touchFacebookEvent ["track", "PageView"]
     @touchFacebookEvent ["track", "ViewContent"]
     @id = @data.trackPixelId
@@ -70,6 +98,7 @@ class TRM
     return if not this.hasFbPixelId()
 
     @touchFacebookEvent ["init", this.fbPixelId]
+    @hasInitFacebookPixel = true
 
 
 
@@ -308,7 +337,7 @@ class TRM
 
 global = window || module.exports
 global.analytics = global.analytics || []
-global.analytics = new TRM()
+global.analytics = _lodash.merge(global.analytics, new TRM())
 global.analytics.host = "{DOMAIN_NAME}/track"
 global.console = global.console || {
   log: (msg) ->

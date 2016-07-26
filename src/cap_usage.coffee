@@ -34,9 +34,14 @@
         n = document.getElementsByTagName("script")[0]
         n.parentNode.insertBefore a, n
 
-      event = window.onload
+      onloadEvent = window.onload
       window.onload = ->
-        event()  if event
+        onloadEvent() if onloadEvent
+        callback() if callback and ({}.toString.call(callback) is '[object Function]')
+
+      onhashchangeEvent = window.onhashchange
+      window.onhashchange = ->
+        onhashchangeEvent() if onhashchangeEvent
         callback() if callback and ({}.toString.call(callback) is '[object Function]')
 
       return
