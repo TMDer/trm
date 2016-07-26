@@ -125,6 +125,11 @@ class TRM
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
 
+    if elements.length is 0
+      setTimeout( () ->
+        return that.setNGo.call(that, info)
+      , 3500)
+      return
 
     _lodash.forEach elements, (element) ->
       console.log "#### addEventListener :: #{that.touchAdMinerEvent}"
