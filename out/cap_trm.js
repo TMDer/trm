@@ -94,10 +94,16 @@ TRM = (function() {
     this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
     _lodash.forEach(triggers, function(trigger) {
-      var currentUrl;
+      var currentUrl, isSuccess;
       switch (trigger.triggerType) {
         case "Element":
-          return that.setTriggerElementEvent(trigger);
+          isSuccess = that.setTriggerElementEvent(trigger);
+          if (!isSuccess) {
+            return setTimeout(function() {
+              that.setTriggerElementEvent.call(that, trigger);
+            }, 3500);
+          }
+          break;
         case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
@@ -136,11 +142,15 @@ TRM = (function() {
     that = this;
     triggerElement = trigger.emitElement;
     elements = this.queryElement(triggerElement);
-    return _lodash.forEach(elements, function(element) {
+    if (elements.length === 0) {
+      return false;
+    }
+    _lodash.forEach(elements, function(element) {
       return element.addEventListener("click", function() {
         return that.process.call(that, trigger, that.touchAdMinerEvent);
       });
     });
+    return true;
   };
 
   TRM.prototype.process = function(trigger, callback) {

@@ -83,7 +83,12 @@ class TRM
     _lodash.forEach triggers, (trigger) ->
       switch trigger.triggerType
         when "Element"
-          that.setTriggerElementEvent trigger
+          isSuccess = that.setTriggerElementEvent trigger
+          unless isSuccess
+            setTimeout( () ->
+              that.setTriggerElementEvent.call(that, trigger)
+              return
+            , 3500)
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
@@ -119,14 +124,16 @@ class TRM
 
 
   setTriggerElementEvent: (trigger) ->
-
     that = @
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
+    if elements.length is 0
+      return false
 
     _lodash.forEach elements, (element) ->
       element.addEventListener "click", () ->
         that.process.call that, trigger, that.touchAdMinerEvent
+    return true
 
 
 
