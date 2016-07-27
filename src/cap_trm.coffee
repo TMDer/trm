@@ -92,7 +92,12 @@ class TRM
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
-          that.process trigger
+          isSuccess = that.process trigger
+          unless isSuccess
+            setTimeout( () ->
+              that.process.call(that, trigger)
+              return
+            , 3500)
 
     @touchAdMinerEvent()
 
@@ -143,6 +148,9 @@ class TRM
     elementsObj = trigger.elementsObj
 
     data = @collectElementsData elementsObj
+
+    return false unless @isDataSuccessfullyGet(data)
+
     data.triggerEventId = trigger.id
 
     triggerTarget = trigger.triggerTarget
@@ -165,7 +173,7 @@ class TRM
       eventData = _lodash.cloneDeep @info
       eventData[triggerTarget] = data
       callback.call that, eventData
-      return
+      return true
 
     @pmdReturnData[triggerTarget] = data
 
@@ -175,6 +183,8 @@ class TRM
       totalPrice = totalPrices[0]
       @pmdReturnData.price = totalPrice
       @pmdReturnData.currency = @data.currency
+
+    return true
 
 
 
@@ -194,6 +204,19 @@ class TRM
         data[key] = e.innerText
 
     return data
+
+
+
+  isDataSuccessfullyGet: (element) ->
+
+    isDataFound = false
+
+    _lodash.forEach element, (e) ->
+      if e.length > 0 and e[0]
+        isDataFound = true
+        return false
+
+    return isDataFound
 
 
 
