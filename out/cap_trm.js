@@ -100,9 +100,12 @@ TRM = (function() {
       switch (trigger.triggerType) {
         case "Element":
           isSuccess = that.setTriggerElementEvent(trigger);
+          console.log("after setTriggerElementEvent isSuccess :: " + isSuccess);
           if (!isSuccess) {
             return setTimeout(function() {
-              return that.setTriggerElementEvent.call(that, trigger);
+              var fooobar;
+              fooobar = that.setTriggerElementEvent.call(that, trigger);
+              console.log("after setTimeout setTriggerElementEvent isSuccess :: " + fooobar);
             }, 3500);
           }
           break;
@@ -143,7 +146,9 @@ TRM = (function() {
     var elements, that, triggerElement;
     that = this;
     triggerElement = trigger.emitElement;
+    console.log("queryElement begin");
     elements = this.queryElement(triggerElement);
+    console.log("queryElement end");
     if (elements.length === 0) {
       return false;
     }

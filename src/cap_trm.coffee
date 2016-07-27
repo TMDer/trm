@@ -86,9 +86,12 @@ class TRM
       switch trigger.triggerType
         when "Element"
           isSuccess = that.setTriggerElementEvent trigger
+          console.log "after setTriggerElementEvent isSuccess :: #{isSuccess}"
           unless isSuccess
             setTimeout( () ->
-              return that.setTriggerElementEvent.call(that, trigger)
+              fooobar = that.setTriggerElementEvent.call(that, trigger)
+              console.log "after setTimeout setTriggerElementEvent isSuccess :: #{fooobar}"
+              return
             , 3500)
         when "Page"
           currentUrl = window.location.href
@@ -127,7 +130,10 @@ class TRM
   setTriggerElementEvent: (trigger) ->
     that = @
     triggerElement = trigger.emitElement
+
+    console.log "queryElement begin"
     elements = @queryElement triggerElement
+    console.log "queryElement end"
 
     if elements.length is 0
       return false
