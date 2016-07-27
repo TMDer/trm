@@ -97,16 +97,26 @@ TRM = (function() {
       var currentUrl;
       switch (trigger.triggerType) {
         case "Element":
-          return that.setTriggerElementEvent(trigger);
+          return that.delayIfNotSuccess(that, that.setTriggerElementEvent, [trigger]);
         case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
             return;
           }
-          return that.process(trigger);
+          return that.delayIfNotSuccess(that, that.process, [trigger]);
       }
     });
     return this.touchAdMinerEvent();
+  };
+
+  TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray) {
+    var isSuccess;
+    isSuccess = fn.apply(context, argumentArray);
+    if (!isSuccess) {
+      return setTimeout(function() {
+        fn.apply(context, argumentArray);
+      }, 3500);
+    }
   };
 
   TRM.prototype.initFacebookPixel = function() {
@@ -136,11 +146,15 @@ TRM = (function() {
     that = this;
     triggerElement = trigger.emitElement;
     elements = this.queryElement(triggerElement);
-    return _lodash.forEach(elements, function(element) {
+    if (elements.length === 0) {
+      return false;
+    }
+    _lodash.forEach(elements, function(element) {
       return element.addEventListener("click", function() {
         return that.process.call(that, trigger, that.touchAdMinerEvent);
       });
     });
+    return true;
   };
 
   TRM.prototype.process = function(trigger, callback) {
@@ -148,6 +162,9 @@ TRM = (function() {
     that = this;
     elementsObj = trigger.elementsObj;
     data = this.collectElementsData(elementsObj);
+    if (!this.isDataSuccessfullyGet(data)) {
+      return false;
+    }
     data.triggerEventId = trigger.id;
     triggerTarget = trigger.triggerTarget;
     fbDataArray = this.transformData(triggerTarget, data);
@@ -166,15 +183,16 @@ TRM = (function() {
       eventData = _lodash.cloneDeep(this.info);
       eventData[triggerTarget] = data;
       callback.call(that, eventData);
-      return;
+      return true;
     }
     this.pmdReturnData[triggerTarget] = data;
     totalPrices = data.totalPrices;
     if (totalPrices && totalPrices[0]) {
       totalPrice = totalPrices[0];
       this.pmdReturnData.price = totalPrice;
-      return this.pmdReturnData.currency = this.data.currency;
+      this.pmdReturnData.currency = this.data.currency;
     }
+    return true;
   };
 
   TRM.prototype.collectElementsData = function(elementsObj) {
@@ -196,6 +214,18 @@ TRM = (function() {
       }
     });
     return data;
+  };
+
+  TRM.prototype.isDataSuccessfullyGet = function(element) {
+    var isDataFound;
+    isDataFound = false;
+    _lodash.forEach(element, function(e) {
+      if (e.length > 0 && e[0]) {
+        isDataFound = true;
+        return false;
+      }
+    });
+    return isDataFound;
   };
 
   TRM.prototype.transformData = function(adMinerTarget, data) {

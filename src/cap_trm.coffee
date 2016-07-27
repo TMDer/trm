@@ -83,13 +83,24 @@ class TRM
     _lodash.forEach triggers, (trigger) ->
       switch trigger.triggerType
         when "Element"
-          that.setTriggerElementEvent trigger
+          that.delayIfNotSuccess that, that.setTriggerElementEvent, [trigger]
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
-          that.process trigger
+          that.delayIfNotSuccess that, that.process, [trigger]
 
     @touchAdMinerEvent()
+
+
+
+  delayIfNotSuccess: (context, fn, argumentArray) ->
+
+    isSuccess = fn.apply(context, argumentArray)
+    unless isSuccess
+      setTimeout( () ->
+        fn.apply(context, argumentArray)
+        return
+      , 3500)
 
 
 
@@ -119,14 +130,16 @@ class TRM
 
 
   setTriggerElementEvent: (trigger) ->
-
     that = @
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
+    if elements.length is 0
+      return false
 
     _lodash.forEach elements, (element) ->
       element.addEventListener "click", () ->
         that.process.call that, trigger, that.touchAdMinerEvent
+    return true
 
 
 
@@ -136,6 +149,9 @@ class TRM
     elementsObj = trigger.elementsObj
 
     data = @collectElementsData elementsObj
+
+    return false unless @isDataSuccessfullyGet(data)
+
     data.triggerEventId = trigger.id
 
     triggerTarget = trigger.triggerTarget
@@ -158,7 +174,7 @@ class TRM
       eventData = _lodash.cloneDeep @info
       eventData[triggerTarget] = data
       callback.call that, eventData
-      return
+      return true
 
     @pmdReturnData[triggerTarget] = data
 
@@ -168,6 +184,8 @@ class TRM
       totalPrice = totalPrices[0]
       @pmdReturnData.price = totalPrice
       @pmdReturnData.currency = @data.currency
+
+    return true
 
 
 
@@ -187,6 +205,19 @@ class TRM
         data[key] = e.innerText
 
     return data
+
+
+
+  isDataSuccessfullyGet: (element) ->
+
+    isDataFound = false
+
+    _lodash.forEach element, (e) ->
+      if e.length > 0 and e[0]
+        isDataFound = true
+        return false
+
+    return isDataFound
 
 
 
