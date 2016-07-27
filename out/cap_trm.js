@@ -111,7 +111,7 @@ TRM = (function() {
 
   TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray) {
     var isSuccess;
-    isSuccess = fn(trigger);
+    isSuccess = fn.apply(context, argumentArray);
     if (!isSuccess) {
       return setTimeout(function() {
         fn.apply(context, argumentArray);

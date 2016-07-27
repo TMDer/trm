@@ -95,7 +95,7 @@ class TRM
 
   delayIfNotSuccess: (context, fn, argumentArray) ->
 
-    isSuccess = fn trigger
+    isSuccess = fn.apply(context, argumentArray)
     unless isSuccess
       setTimeout( () ->
         fn.apply(context, argumentArray)
