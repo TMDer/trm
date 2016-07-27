@@ -227,17 +227,24 @@ class TRM
 
 
   queryElement: (elementWithQueryInfo) ->
+    console.log "elementWithQueryInfo :: #{JSON.stringify(elementWithQueryInfo, null, 2)}"
+    console.log "elementWithQueryInfo.id :: #{elementWithQueryInfo.id}"
+    console.log "jquery ele length :: #{$('#elementWithQueryInfo.id').length}"
 
     return null unless elementWithQueryInfo
 
     if elementWithQueryInfo.id
+      console.log "use getElementBId"
       element = document.getElementById elementWithQueryInfo.id
       return [element] if element
       return []
     if elementWithQueryInfo.class
+      console.log "use getElementsByclassname"
       return document.getElementsByClassName elementWithQueryInfo.class
     if elementWithQueryInfo.name
+      console.log "use getElementsByName"
       return document.getElementsByName elementWithQueryInfo.name
+    console.log "use querySelectorAll"
     return document.querySelectorAll elementWithQueryInfo.customSelection
 
 

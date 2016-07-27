@@ -239,10 +239,14 @@ TRM = (function() {
 
   TRM.prototype.queryElement = function(elementWithQueryInfo) {
     var element;
+    console.log("elementWithQueryInfo :: " + (JSON.stringify(elementWithQueryInfo, null, 2)));
+    console.log("elementWithQueryInfo.id :: " + elementWithQueryInfo.id);
+    console.log("jquery ele length :: " + ($('#elementWithQueryInfo.id').length));
     if (!elementWithQueryInfo) {
       return null;
     }
     if (elementWithQueryInfo.id) {
+      console.log("use getElementBId");
       element = document.getElementById(elementWithQueryInfo.id);
       if (element) {
         return [element];
@@ -250,11 +254,14 @@ TRM = (function() {
       return [];
     }
     if (elementWithQueryInfo["class"]) {
+      console.log("use getElementsByclassname");
       return document.getElementsByClassName(elementWithQueryInfo["class"]);
     }
     if (elementWithQueryInfo.name) {
+      console.log("use getElementsByName");
       return document.getElementsByName(elementWithQueryInfo.name);
     }
+    console.log("use querySelectorAll");
     return document.querySelectorAll(elementWithQueryInfo.customSelection);
   };
 
