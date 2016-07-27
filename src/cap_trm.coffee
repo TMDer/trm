@@ -83,23 +83,24 @@ class TRM
     _lodash.forEach triggers, (trigger) ->
       switch trigger.triggerType
         when "Element"
-          isSuccess = that.setTriggerElementEvent trigger
-          unless isSuccess
-            setTimeout( () ->
-              that.setTriggerElementEvent.call(that, trigger)
-              return
-            , 3500)
+          that.delayIfNotSuccess that, that.setTriggerElementEvent, [trigger]
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
-          isSuccess = that.process trigger
-          unless isSuccess
-            setTimeout( () ->
-              that.process.call(that, trigger)
-              return
-            , 3500)
+          that.delayIfNotSuccess that, that.process, [trigger]
 
     @touchAdMinerEvent()
+
+
+
+  delayIfNotSuccess: (context, fn, argumentArray) ->
+
+    isSuccess = fn trigger
+    unless isSuccess
+      setTimeout( () ->
+        fn.apply(context, argumentArray)
+        return
+      , 3500)
 
 
 
