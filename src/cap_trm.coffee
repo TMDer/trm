@@ -195,6 +195,9 @@ class TRM
     data = {}
 
     _lodash.forEach elementsObj, (element, key) ->
+
+      return true unless key
+      
       e = that.queryElement element
       if _lodash.isArrayLikeObject e
         e = _lodash.map e, (obj) ->
@@ -208,12 +211,14 @@ class TRM
 
 
 
-  isDataSuccessfullyGet: (element) ->
+  isDataSuccessfullyGet: (elements) ->
+
+    return true unless _lodash.isArrayLikeObject(elements) and elements.length
 
     isDataFound = false
 
-    _lodash.forEach element, (e) ->
-      if e.length > 0 and e[0]
+    _lodash.forEach elements, (e) ->
+      if e.length and e[0]
         isDataFound = true
         return false
 
