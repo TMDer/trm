@@ -201,6 +201,9 @@ TRM = (function() {
     data = {};
     _lodash.forEach(elementsObj, function(element, key) {
       var e;
+      if (!key) {
+        return true;
+      }
       e = that.queryElement(element);
       if (_lodash.isArrayLikeObject(e)) {
         e = _lodash.map(e, function(obj) {
@@ -216,11 +219,14 @@ TRM = (function() {
     return data;
   };
 
-  TRM.prototype.isDataSuccessfullyGet = function(element) {
+  TRM.prototype.isDataSuccessfullyGet = function(elements) {
     var isDataFound;
+    if (!(_lodash.isArrayLikeObject(elements) && elements.length)) {
+      return true;
+    }
     isDataFound = false;
-    _lodash.forEach(element, function(e) {
-      if (e.length > 0 && e[0]) {
+    _lodash.forEach(elements, function(e) {
+      if (e.length && e[0]) {
         isDataFound = true;
         return false;
       }
