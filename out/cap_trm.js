@@ -219,13 +219,13 @@ TRM = (function() {
     return data;
   };
 
-  TRM.prototype.isDataSuccessfullyGet = function(elements) {
+  TRM.prototype.isDataSuccessfullyGet = function(elementsObj) {
     var isDataFound;
-    if (!(_lodash.isArrayLikeObject(elements) && elements.length)) {
+    if (!_lodash.isPlainObject(elementsObj)) {
       return true;
     }
     isDataFound = false;
-    _lodash.forEach(elements, function(e) {
+    _lodash.forEach(elementsObj, function(e) {
       if (e.length && e[0]) {
         isDataFound = true;
         return false;

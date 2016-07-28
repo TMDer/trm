@@ -211,13 +211,13 @@ class TRM
 
 
 
-  isDataSuccessfullyGet: (elements) ->
+  isDataSuccessfullyGet: (elementsObj) ->
 
-    return true unless _lodash.isArrayLikeObject(elements) and elements.length
+    return true unless _lodash.isPlainObject(elementsObj) # and Object.keys(elementsObj).length
 
     isDataFound = false
 
-    _lodash.forEach elements, (e) ->
+    _lodash.forEach elementsObj, (e) ->
       if e.length and e[0]
         isDataFound = true
         return false
