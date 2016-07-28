@@ -196,7 +196,7 @@ class TRM
 
     _lodash.forEach elementsObj, (element, key) ->
 
-      return true unless key
+      return true unless element[Object.keys(element)[0]]
       
       e = that.queryElement element
       if _lodash.isArrayLikeObject e
