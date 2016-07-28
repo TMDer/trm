@@ -213,7 +213,7 @@ class TRM
 
   isDataSuccessfullyGet: (elementsObj) ->
 
-    return true unless _lodash.isPlainObject(elementsObj) # and Object.keys(elementsObj).length
+    return true unless _lodash.isPlainObject(elementsObj) and Object.keys(elementsObj).length
 
     isDataFound = false
 

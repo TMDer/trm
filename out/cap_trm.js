@@ -221,7 +221,7 @@ TRM = (function() {
 
   TRM.prototype.isDataSuccessfullyGet = function(elementsObj) {
     var isDataFound;
-    if (!_lodash.isPlainObject(elementsObj)) {
+    if (!(_lodash.isPlainObject(elementsObj) && Object.keys(elementsObj).length)) {
       return true;
     }
     isDataFound = false;
