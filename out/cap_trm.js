@@ -201,7 +201,7 @@ TRM = (function() {
     data = {};
     _lodash.forEach(elementsObj, function(element, key) {
       var e;
-      if (!element[Object.keys(element)[0]]) {
+      if (!(element && element[Object.keys(element)[0]])) {
         return true;
       }
       e = that.queryElement(element);
