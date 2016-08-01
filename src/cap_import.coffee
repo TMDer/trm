@@ -46,7 +46,7 @@ module.exports = exports = {
 
     self = @
     {domain, destPath, srcPath, minify} = config
-    filepath = srcPath || path.join(__dirname, "./cap_trm.js")
+    filepath = srcPath || path.join(__dirname, "./cap_empty_trm.js")
 
     # will return a promise module
     return new Promise (resolve, reject) ->
