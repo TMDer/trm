@@ -43,7 +43,7 @@ module.exports = exports = {
     var destPath, domain, filepath, minify, self, srcPath;
     self = this;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
-    filepath = srcPath || path.join(__dirname, "./cap_trm.js");
+    filepath = srcPath || path.join(__dirname, "./cap_empty_trm.js");
     return new Promise(function(resolve, reject) {
       var b;
       b = browserify();
