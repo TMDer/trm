@@ -93,28 +93,33 @@ TRM = (function() {
     this.touchFacebookEvent(["track", "ViewContent"]);
     this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
-    _lodash.forEach(triggers, function(trigger) {
+    return _lodash.forEach(triggers, function(trigger) {
       var currentUrl;
       switch (trigger.triggerType) {
         case "Element":
-          return that.delayIfNotSuccess(that, that.setTriggerElementEvent, [trigger]);
+          that.delayIfNotSuccess(that, that.setTriggerElementEvent, [trigger]);
+          return this.touchAdMinerEvent();
         case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
             return;
           }
-          return that.delayIfNotSuccess(that, that.process, [trigger]);
+          return that.delayIfNotSuccess(that, that.process, [trigger], that.touchAdMinerEvent);
       }
     });
-    return this.touchAdMinerEvent();
   };
 
-  TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray) {
+  TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray, callback) {
     var isSuccess;
     isSuccess = fn.apply(context, argumentArray);
-    if (!isSuccess) {
+    if (isSuccess && _.isFuction(callback)) {
+      return callback();
+    } else {
       return setTimeout(function() {
         fn.apply(context, argumentArray);
+        if (_.isFuction(callback)) {
+          callback();
+        }
       }, 3500);
     }
   };

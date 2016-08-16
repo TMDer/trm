@@ -84,21 +84,23 @@ class TRM
       switch trigger.triggerType
         when "Element"
           that.delayIfNotSuccess that, that.setTriggerElementEvent, [trigger]
+          @touchAdMinerEvent()
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
-          that.delayIfNotSuccess that, that.process, [trigger]
-
-    @touchAdMinerEvent()
+          that.delayIfNotSuccess that, that.process, [trigger], that.touchAdMinerEvent
 
 
 
-  delayIfNotSuccess: (context, fn, argumentArray) ->
+  delayIfNotSuccess: (context, fn, argumentArray, callback) ->
 
     isSuccess = fn.apply(context, argumentArray)
-    unless isSuccess
-      setTimeout( () ->
+    if isSuccess and _.isFuction(callback)
+      callback()
+    else
+      setTimeout( ->
         fn.apply(context, argumentArray)
+        callback() if _.isFuction(callback)
         return
       , 3500)
 
