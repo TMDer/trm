@@ -90,7 +90,6 @@ TRM = (function() {
       this.initFacebookPixel();
     }
     this.touchFacebookEvent(["track", "PageView"]);
-    this.touchFacebookEvent(["track", "ViewContent"]);
     this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
     return _lodash.forEach(triggers, function(trigger) {
@@ -163,7 +162,7 @@ TRM = (function() {
   };
 
   TRM.prototype.process = function(trigger, callback) {
-    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, step, that, totalPrice, totalPrices, triggerTarget;
+    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, fbDataForViewContent, step, that, totalPrice, totalPrices, triggerTarget;
     that = this;
     elementsObj = trigger.elementsObj;
     data = this.collectElementsData(elementsObj);
@@ -182,6 +181,10 @@ TRM = (function() {
         fbDataForInitiateCheckout.push(fbDataArray[2]);
         this.touchFacebookEvent(fbDataForInitiateCheckout);
       }
+    } else if (fbDataArray[1] === "Product") {
+      fbDataForViewContent = ["track", "ViewContent"];
+      fbDataForViewContent.push(fbDataArray[2]);
+      this.touchFacebookEvent(fbDataForViewContent);
     }
     this.touchFacebookEvent(fbDataArray);
     if (_lodash.isFunction(callback)) {

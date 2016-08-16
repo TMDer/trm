@@ -76,7 +76,6 @@ class TRM
       @initFacebookPixel()
 
     @touchFacebookEvent ["track", "PageView"]
-    @touchFacebookEvent ["track", "ViewContent"]
     @id = @data.trackPixelId
     triggers = @data.triggers
 
@@ -169,9 +168,14 @@ class TRM
         fbDataForInitiateCheckout = ["track", "InitiateCheckout"]
         fbDataForInitiateCheckout.push fbDataArray[2]
         @touchFacebookEvent fbDataForInitiateCheckout
+    else if fbDataArray[1] is "Product"
+      fbDataForViewContent = ["track", "ViewContent"]
+      fbDataForViewContent.push fbDataArray[2]
+      @touchFacebookEvent fbDataForViewContent
 
     @touchFacebookEvent fbDataArray
 
+    # There should be a callback if it's triggered by element
     if _lodash.isFunction callback
       eventData = _lodash.cloneDeep @info
       eventData[triggerTarget] = data
