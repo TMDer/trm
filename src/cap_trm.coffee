@@ -96,11 +96,11 @@ class TRM
 
     isSuccess = fn.apply(context, argumentArray)
     if isSuccess and _.isFuction(callback)
-      callback()
+      callback.call(context)
     else
       setTimeout( ->
         fn.apply(context, argumentArray)
-        callback() if _lodash.isFunction(callback)
+        callback.call(context) if _lodash.isFunction(callback)
         return
       , 3500)
 

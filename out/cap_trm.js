@@ -113,12 +113,12 @@ TRM = (function() {
     var isSuccess;
     isSuccess = fn.apply(context, argumentArray);
     if (isSuccess && _.isFuction(callback)) {
-      return callback();
+      return callback.call(context);
     } else {
       return setTimeout(function() {
         fn.apply(context, argumentArray);
         if (_lodash.isFunction(callback)) {
-          callback();
+          callback.call(context);
         }
       }, 3500);
     }
