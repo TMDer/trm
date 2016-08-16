@@ -112,7 +112,7 @@ TRM = (function() {
   TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray, callback) {
     var isSuccess;
     isSuccess = fn.apply(context, argumentArray);
-    if (isSuccess && _.isFuction(callback)) {
+    if (isSuccess && _lodash.isFunction(callback)) {
       return callback.call(context);
     } else {
       return setTimeout(function() {

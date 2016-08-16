@@ -95,7 +95,7 @@ class TRM
   delayIfNotSuccess: (context, fn, argumentArray, callback) ->
 
     isSuccess = fn.apply(context, argumentArray)
-    if isSuccess and _.isFuction(callback)
+    if isSuccess and _lodash.isFunction(callback)
       callback.call(context)
     else
       setTimeout( ->
