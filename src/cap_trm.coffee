@@ -100,7 +100,7 @@ class TRM
     else
       setTimeout( ->
         fn.apply(context, argumentArray)
-        callback() if _.isFuction(callback)
+        callback() if _lodash.isFuction(callback)
         return
       , 3500)
 

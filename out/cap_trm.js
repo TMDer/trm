@@ -117,7 +117,7 @@ TRM = (function() {
     } else {
       return setTimeout(function() {
         fn.apply(context, argumentArray);
-        if (_.isFuction(callback)) {
+        if (_lodash.isFuction(callback)) {
           callback();
         }
       }, 3500);
