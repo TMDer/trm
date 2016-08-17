@@ -213,7 +213,7 @@ TRM = (function() {
         return true;
       }
       if (element.urlParam) {
-        data[key] = [getParameterByName(element.urlParam)];
+        data[key] = [that.getParameterByName(element.urlParam)];
         return true;
       }
       e = that.queryElement(element);

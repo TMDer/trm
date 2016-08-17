@@ -212,7 +212,7 @@ class TRM
       return true unless element and element[Object.keys(element)[0]]
 
       if element.urlParam
-        data[key] = [getParameterByName element.urlParam]
+        data[key] = [that.getParameterByName element.urlParam]
         return true
       
       e = that.queryElement element
