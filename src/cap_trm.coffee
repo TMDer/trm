@@ -89,7 +89,7 @@ class TRM
       switch trigger.triggerType
         when "Element"
           that.delayIfNotSuccess that, that.setTriggerElementEvent, [trigger]
-          @touchAdMinerEvent()
+          that.touchAdMinerEvent()
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return

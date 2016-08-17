@@ -97,7 +97,7 @@ TRM = (function() {
       switch (trigger.triggerType) {
         case "Element":
           that.delayIfNotSuccess(that, that.setTriggerElementEvent, [trigger]);
-          return this.touchAdMinerEvent();
+          return that.touchAdMinerEvent();
         case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
