@@ -48,6 +48,8 @@ class TRM
     return if isSupport or @hasInitHashChangeEvent
     @bindHashChangeEvent(info)
 
+
+
   bindHashChangeEvent: (info) ->
     that = @
     @hasInitHashChangeEvent = true
@@ -56,6 +58,8 @@ class TRM
       onhashchangeEvent() if onhashchangeEvent
       that.setNGo.call(that, info)
     return
+
+
 
   checkTrmVersion: (supportTrmVersion) ->
     currentTrmVersion = window.analytics.VERSION or "0"
@@ -68,6 +72,8 @@ class TRM
       isSupport = currentTrmVersion >= supportTrmVersion
 
     return isSupport
+
+
 
   flow: () ->
 
@@ -131,6 +137,7 @@ class TRM
 
 
   setTriggerElementEvent: (trigger) ->
+
     that = @
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
@@ -203,13 +210,17 @@ class TRM
     _lodash.forEach elementsObj, (element, key) ->
 
       return true unless element and element[Object.keys(element)[0]]
+
+      if element.urlParam
+        data[key] = [getParameterByName element.urlParam]
+        return true
       
       e = that.queryElement element
       if _lodash.isArrayLikeObject e
         e = _lodash.map e, (obj) ->
           return obj.innerText
         data[key] = e
-        return
+        return true
       if e
         data[key] = e.innerText
 
@@ -374,6 +385,17 @@ class TRM
 
     cookie.set(key, data, { expires: newDate, path: "/" })
     return @
+
+
+
+  getParameterByName: (name, url) ->
+    url = window.location.href unless url
+    name = name.replace /[\[\]]/g, "\\$&"
+    regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
+    results = regex.exec(url)
+    return null unless results
+    return '' unless results[2]
+    return decodeURIComponent(results[2].replace(/\+/g, " "))
 
 
 

@@ -212,13 +212,17 @@ TRM = (function() {
       if (!(element && element[Object.keys(element)[0]])) {
         return true;
       }
+      if (element.urlParam) {
+        data[key] = [getParameterByName(element.urlParam)];
+        return true;
+      }
       e = that.queryElement(element);
       if (_lodash.isArrayLikeObject(e)) {
         e = _lodash.map(e, function(obj) {
           return obj.innerText;
         });
         data[key] = e;
-        return;
+        return true;
       }
       if (e) {
         return data[key] = e.innerText;
@@ -378,6 +382,23 @@ TRM = (function() {
       path: "/"
     });
     return this;
+  };
+
+  TRM.prototype.getParameterByName = function(name, url) {
+    var regex, results;
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+    results = regex.exec(url);
+    if (!results) {
+      return null;
+    }
+    if (!results[2]) {
+      return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
   };
 
   return TRM;
