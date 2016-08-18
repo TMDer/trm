@@ -218,13 +218,20 @@ class TRM
       e = that.queryElement element
       if _lodash.isArrayLikeObject e
         e = _lodash.map e, (obj) ->
-          return obj.innerText
+          return getElementContent obj
         data[key] = e
         return true
       if e
-        data[key] = e.innerText
+        data[key] = getElementContent e
 
     return data
+
+
+
+  getElementContent: (element) ->
+
+    return element.value if element.tagName is "INPUT"
+    return element.innerText
 
 
 

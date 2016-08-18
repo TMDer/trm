@@ -219,16 +219,23 @@ TRM = (function() {
       e = that.queryElement(element);
       if (_lodash.isArrayLikeObject(e)) {
         e = _lodash.map(e, function(obj) {
-          return obj.innerText;
+          return getElementContent(obj);
         });
         data[key] = e;
         return true;
       }
       if (e) {
-        return data[key] = e.innerText;
+        return data[key] = getElementContent(e);
       }
     });
     return data;
+  };
+
+  TRM.prototype.getElementContent = function(element) {
+    if (element.tagName === "INPUT") {
+      return element.value;
+    }
+    return element.innerText;
   };
 
   TRM.prototype.isDataSuccessfullyGet = function(elementsObj) {
