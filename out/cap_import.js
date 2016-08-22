@@ -44,13 +44,17 @@ module.exports = exports = {
     self = this;
     versions = config.versions;
     return versions.map(function(version) {
-      return composeFile.call(self, version, config);
+      return self.composeFile.call(self, version, config);
     });
   },
   composeFile: function(version, config) {
     var destPath, domain, filepath, minify, srcPath;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
-    filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js");
+    if (version === VERSION) {
+      filepath = srcPath || path.join(__dirname, "./cap_trm.js");
+    } else {
+      filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js");
+    }
     return new Promise(function(resolve, reject) {
       var b;
       b = browserify();

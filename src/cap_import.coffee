@@ -48,7 +48,7 @@ module.exports = exports = {
     versions = config.versions
 
     return versions.map (version) ->
-      return composeFile.call(self, version, config)
+      return self.composeFile.call(self, version, config)
 
 
 
@@ -56,7 +56,10 @@ module.exports = exports = {
 
     {domain, destPath, srcPath, minify} = config
 
-    filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js")
+    if version is VERSION
+      filepath = srcPath || path.join(__dirname, "./cap_trm.js")
+    else
+      filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js") 
 
     # will return a promise module
     return new Promise (resolve, reject) ->
