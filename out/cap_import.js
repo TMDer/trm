@@ -30,20 +30,27 @@ module.exports = exports = {
     code = code.replace(/{ENV_PATH}/g, this.optUrl + pid);
     return code + "window.analytics.load(function () {\n  window.analytics.setNGo({\"email\": \"aaa@bbb.cc\"});\n});";
   },
-  compress: function(filepath, opt) {
+  compress: function(version, filepath, opt) {
     var code, file, result;
     filepath = filepath || path.join(__dirname, "./cap_usage.js");
     file = fs.readFileSync(filepath, "utf8");
-    file = file.replace("{VERSION}", VERSION);
+    file = file.replace("{VERSION}", version);
     code = file;
     result = this.compressContent(code);
     return result;
   },
   generateLib: function(config) {
-    var destPath, domain, filepath, minify, self, srcPath;
+    var self, versions;
     self = this;
+    versions = config.versions;
+    return versions.map(function(version) {
+      return composeFile.call(self, version, config);
+    });
+  },
+  composeFile: function(version, config) {
+    var destPath, domain, filepath, minify, srcPath;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
-    filepath = srcPath || path.join(__dirname, "./cap_trm.js");
+    filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js");
     return new Promise(function(resolve, reject) {
       var b;
       b = browserify();
@@ -59,7 +66,11 @@ module.exports = exports = {
           file = self.compressContent(file);
           file = file.code;
         }
-        if (!destPath) {
+        if (destPath) {
+          if (version !== VERSION) {
+            destPath = destPath.replace(".js", "." + version + ".js");
+          }
+        } else {
           return reject();
         }
         destPath = path.join(process.cwd(), destPath);

@@ -30,11 +30,11 @@ module.exports = exports = {
       });
     """
 
-  compress: (filepath, opt) ->
+  compress: (version, filepath, opt) ->
     filepath = filepath || path.join(__dirname, "./cap_usage.js")
 
     file = fs.readFileSync filepath, "utf8"
-    file = file.replace "{VERSION}", VERSION
+    file = file.replace "{VERSION}", version
     code = file
     result = @.compressContent code
     return result
@@ -45,14 +45,26 @@ module.exports = exports = {
   generateLib: (config) ->
 
     self = @
+    versions = config.versions
+
+    return versions.map (version) ->
+      return composeFile.call(self, version, config)
+
+
+
+  composeFile: (version, config) ->
+
     {domain, destPath, srcPath, minify} = config
-    filepath = srcPath || path.join(__dirname, "./cap_trm.js")
+
+    filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js")
 
     # will return a promise module
     return new Promise (resolve, reject) ->
+      
       b = browserify()
       b.add(filepath)
       b.bundle (err, src) ->
+
         return reject(err) if err
 
         file = src.toString()
@@ -62,13 +74,17 @@ module.exports = exports = {
           file = self.compressContent(file)
           file = file.code
 
-        unless destPath
+        if destPath
+          destPath = destPath.replace(".js", "." + version + ".js") unless version is VERSION
+        else
           return reject()
 
         destPath = path.join(process.cwd(), destPath)
         self.saveFile(destPath, file)
 
         resolve(file)
+
+
 
   compressContent: (content) ->
     return UglifyJS.minify(content, {fromString: true})
