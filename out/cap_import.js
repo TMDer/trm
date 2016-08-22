@@ -48,7 +48,8 @@ module.exports = exports = {
     });
   },
   composeFile: function(version, config) {
-    var destPath, domain, filepath, minify, srcPath;
+    var destPath, domain, filepath, minify, self, srcPath;
+    self = this;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
     if (version === VERSION) {
       filepath = srcPath || path.join(__dirname, "./cap_trm.js");

@@ -14,7 +14,7 @@ qs = require("querystring");
 
 uuid = require('node-uuid');
 
-VERSION = require("../package.json").version;
+VERSION = "0.2.4";
 
 _lodash = require("lodash");
 

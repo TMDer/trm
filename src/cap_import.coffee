@@ -54,6 +54,7 @@ module.exports = exports = {
 
   composeFile: (version, config) ->
 
+    self = @
     {domain, destPath, srcPath, minify} = config
 
     if version is VERSION
