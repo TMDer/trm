@@ -84,6 +84,9 @@ module.exports = exports = {
       });
     });
   },
+  getLatestVersion: function() {
+    return VERSION;
+  },
   compressContent: function(content) {
     return UglifyJS.minify(content, {
       fromString: true

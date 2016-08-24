@@ -90,6 +90,9 @@ module.exports = exports = {
 
 
 
+  getLatestVersion: () ->
+    return VERSION;
+
   compressContent: (content) ->
     return UglifyJS.minify(content, {fromString: true})
 
