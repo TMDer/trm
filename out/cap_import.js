@@ -52,7 +52,7 @@ module.exports = exports = {
     var destPath, domain, filepath, minify, self, srcPath;
     self = this;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
-    if (version === VERSION) {
+    if (version === this.getLatestVersion()) {
       filepath = srcPath || path.join(__dirname, "./cap_trm.js");
     } else {
       filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js");
@@ -73,9 +73,7 @@ module.exports = exports = {
           file = file.code;
         }
         if (destPath) {
-          if (version !== VERSION) {
-            destPath = destPath.replace(".js", "." + version + ".js");
-          }
+          destPath = destPath.replace("{VERSION}", version);
         } else {
           return reject();
         }

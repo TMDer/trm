@@ -59,7 +59,7 @@ module.exports = exports = {
     self = @
     {domain, destPath, srcPath, minify} = config
 
-    if version is VERSION
+    if version is @getLatestVersion()
       filepath = srcPath || path.join(__dirname, "./cap_trm.js")
     else
       filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js") 
@@ -81,7 +81,7 @@ module.exports = exports = {
           file = file.code
 
         if destPath
-          destPath = destPath.replace(".js", "." + version + ".js") unless version is VERSION
+          destPath = destPath.replace "{VERSION}", version
         else
           return reject()
 
