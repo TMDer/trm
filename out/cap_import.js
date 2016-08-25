@@ -30,9 +30,10 @@ module.exports = exports = {
     code = code.replace(/{ENV_PATH}/g, this.optUrl + pid + "&v=" + VERSION);
     return code + "window.analytics.load(function () {\n  window.analytics.setNGo({\"email\": \"aaa@bbb.cc\"});\n});";
   },
-  compress: function(version, filepath, opt) {
-    var code, file, result;
+  compress: function(filepath, opt) {
+    var code, file, result, version;
     filepath = filepath || path.join(__dirname, "./cap_usage.js");
+    version = this.getLatestVersion();
     file = fs.readFileSync(filepath, "utf8");
     file = file.replace("{VERSION}", version);
     code = file;

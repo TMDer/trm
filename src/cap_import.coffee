@@ -30,8 +30,10 @@ module.exports = exports = {
       });
     """
 
-  compress: (version, filepath, opt) ->
+  compress: (filepath, opt) ->
     filepath = filepath || path.join(__dirname, "./cap_usage.js")
+
+    version = @getLatestVersion()
 
     file = fs.readFileSync filepath, "utf8"
     file = file.replace "{VERSION}", version
