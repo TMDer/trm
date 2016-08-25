@@ -22,7 +22,7 @@ module.exports = exports = {
 
   resultDisplay: ({code, pid, aid}) ->
 
-    code = code.replace /{ENV_PATH}/g, @optUrl + pid
+    code = code.replace /{ENV_PATH}/g, @optUrl + pid + "&v=" + VERSION
 
     return code + """
       window.analytics.load(function () {
@@ -91,7 +91,7 @@ module.exports = exports = {
 
 
   getLatestVersion: () ->
-    return VERSION;
+    return VERSION
 
   compressContent: (content) ->
     return UglifyJS.minify(content, {fromString: true})
