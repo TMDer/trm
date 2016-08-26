@@ -219,13 +219,13 @@ TRM = (function() {
       e = that.queryElement(element);
       if (_lodash.isArrayLikeObject(e)) {
         e = _lodash.map(e, function(obj) {
-          return getElementContent(obj);
+          return that.getElementContent(obj);
         });
         data[key] = e;
         return true;
       }
       if (e) {
-        return data[key] = getElementContent(e);
+        return data[key] = that.getElementContent(e);
       }
     });
     return data;

@@ -218,11 +218,11 @@ class TRM
       e = that.queryElement element
       if _lodash.isArrayLikeObject e
         e = _lodash.map e, (obj) ->
-          return getElementContent obj
+          return that.getElementContent obj
         data[key] = e
         return true
       if e
-        data[key] = getElementContent e
+        data[key] = that.getElementContent e
 
     return data
 
