@@ -90,31 +90,35 @@ TRM = (function() {
       this.initFacebookPixel();
     }
     this.touchFacebookEvent(["track", "PageView"]);
-    this.touchFacebookEvent(["track", "ViewContent"]);
     this.id = this.data.trackPixelId;
     triggers = this.data.triggers;
-    _lodash.forEach(triggers, function(trigger) {
+    return _lodash.forEach(triggers, function(trigger) {
       var currentUrl;
       switch (trigger.triggerType) {
         case "Element":
-          return that.delayIfNotSuccess(that, that.setTriggerElementEvent, [trigger]);
+          that.delayIfNotSuccess(that, that.setTriggerElementEvent, [trigger]);
+          return that.touchAdMinerEvent();
         case "Page":
           currentUrl = window.location.href;
           if (currentUrl.indexOf(trigger.emitUrl) === -1) {
             return;
           }
-          return that.delayIfNotSuccess(that, that.process, [trigger]);
+          return that.delayIfNotSuccess(that, that.process, [trigger], that.touchAdMinerEvent);
       }
     });
-    return this.touchAdMinerEvent();
   };
 
-  TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray) {
+  TRM.prototype.delayIfNotSuccess = function(context, fn, argumentArray, callback) {
     var isSuccess;
     isSuccess = fn.apply(context, argumentArray);
-    if (!isSuccess) {
+    if (isSuccess && _lodash.isFunction(callback)) {
+      return callback.call(context);
+    } else {
       return setTimeout(function() {
         fn.apply(context, argumentArray);
+        if (_lodash.isFunction(callback)) {
+          callback.call(context);
+        }
       }, 3500);
     }
   };
@@ -158,7 +162,7 @@ TRM = (function() {
   };
 
   TRM.prototype.process = function(trigger, callback) {
-    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, step, that, totalPrice, totalPrices, triggerTarget;
+    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, fbDataForViewContent, step, that, totalPrice, totalPrices, triggerTarget;
     that = this;
     elementsObj = trigger.elementsObj;
     data = this.collectElementsData(elementsObj);
@@ -177,6 +181,10 @@ TRM = (function() {
         fbDataForInitiateCheckout.push(fbDataArray[2]);
         this.touchFacebookEvent(fbDataForInitiateCheckout);
       }
+    } else if (fbDataArray[1] === "Product") {
+      fbDataForViewContent = ["track", "ViewContent"];
+      fbDataForViewContent.push(fbDataArray[2]);
+      this.touchFacebookEvent(fbDataForViewContent);
     }
     this.touchFacebookEvent(fbDataArray);
     if (_lodash.isFunction(callback)) {
@@ -204,19 +212,30 @@ TRM = (function() {
       if (!(element && element[Object.keys(element)[0]])) {
         return true;
       }
+      if (element.urlParam) {
+        data[key] = [that.getParameterByName(element.urlParam)];
+        return true;
+      }
       e = that.queryElement(element);
       if (_lodash.isArrayLikeObject(e)) {
         e = _lodash.map(e, function(obj) {
-          return obj.innerText;
+          return getElementContent(obj);
         });
         data[key] = e;
-        return;
+        return true;
       }
       if (e) {
-        return data[key] = e.innerText;
+        return data[key] = getElementContent(e);
       }
     });
     return data;
+  };
+
+  TRM.prototype.getElementContent = function(element) {
+    if (element.tagName === "INPUT") {
+      return element.value;
+    }
+    return element.innerText;
   };
 
   TRM.prototype.isDataSuccessfullyGet = function(elementsObj) {
@@ -370,6 +389,23 @@ TRM = (function() {
       path: "/"
     });
     return this;
+  };
+
+  TRM.prototype.getParameterByName = function(name, url) {
+    var regex, results;
+    if (!url) {
+      url = window.location.href;
+    }
+    name = name.replace(/[\[\]]/g, "\\$&");
+    regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)");
+    results = regex.exec(url);
+    if (!results) {
+      return null;
+    }
+    if (!results[2]) {
+      return '';
+    }
+    return decodeURIComponent(results[2].replace(/\+/g, " "));
   };
 
   return TRM;

@@ -48,6 +48,8 @@ class TRM
     return if isSupport or @hasInitHashChangeEvent
     @bindHashChangeEvent(info)
 
+
+
   bindHashChangeEvent: (info) ->
     that = @
     @hasInitHashChangeEvent = true
@@ -56,6 +58,8 @@ class TRM
       onhashchangeEvent() if onhashchangeEvent
       that.setNGo.call(that, info)
     return
+
+
 
   checkTrmVersion: (supportTrmVersion) ->
     currentTrmVersion = window.analytics.VERSION or "0"
@@ -69,6 +73,8 @@ class TRM
 
     return isSupport
 
+
+
   flow: () ->
 
     that = @
@@ -76,7 +82,6 @@ class TRM
       @initFacebookPixel()
 
     @touchFacebookEvent ["track", "PageView"]
-    @touchFacebookEvent ["track", "ViewContent"]
     @id = @data.trackPixelId
     triggers = @data.triggers
 
@@ -84,21 +89,23 @@ class TRM
       switch trigger.triggerType
         when "Element"
           that.delayIfNotSuccess that, that.setTriggerElementEvent, [trigger]
+          that.touchAdMinerEvent()
         when "Page"
           currentUrl = window.location.href
           if currentUrl.indexOf(trigger.emitUrl) is -1 then return
-          that.delayIfNotSuccess that, that.process, [trigger]
-
-    @touchAdMinerEvent()
+          that.delayIfNotSuccess that, that.process, [trigger], that.touchAdMinerEvent
 
 
 
-  delayIfNotSuccess: (context, fn, argumentArray) ->
+  delayIfNotSuccess: (context, fn, argumentArray, callback) ->
 
     isSuccess = fn.apply(context, argumentArray)
-    unless isSuccess
-      setTimeout( () ->
+    if isSuccess and _lodash.isFunction(callback)
+      callback.call(context)
+    else
+      setTimeout( ->
         fn.apply(context, argumentArray)
+        callback.call(context) if _lodash.isFunction(callback)
         return
       , 3500)
 
@@ -130,6 +137,7 @@ class TRM
 
 
   setTriggerElementEvent: (trigger) ->
+
     that = @
     triggerElement = trigger.emitElement
     elements = @queryElement triggerElement
@@ -167,9 +175,14 @@ class TRM
         fbDataForInitiateCheckout = ["track", "InitiateCheckout"]
         fbDataForInitiateCheckout.push fbDataArray[2]
         @touchFacebookEvent fbDataForInitiateCheckout
+    else if fbDataArray[1] is "Product"
+      fbDataForViewContent = ["track", "ViewContent"]
+      fbDataForViewContent.push fbDataArray[2]
+      @touchFacebookEvent fbDataForViewContent
 
     @touchFacebookEvent fbDataArray
 
+    # There should be a callback if it's triggered by element
     if _lodash.isFunction callback
       eventData = _lodash.cloneDeep @info
       eventData[triggerTarget] = data
@@ -197,17 +210,28 @@ class TRM
     _lodash.forEach elementsObj, (element, key) ->
 
       return true unless element and element[Object.keys(element)[0]]
+
+      if element.urlParam
+        data[key] = [that.getParameterByName element.urlParam]
+        return true
       
       e = that.queryElement element
       if _lodash.isArrayLikeObject e
         e = _lodash.map e, (obj) ->
-          return obj.innerText
+          return getElementContent obj
         data[key] = e
-        return
+        return true
       if e
-        data[key] = e.innerText
+        data[key] = getElementContent e
 
     return data
+
+
+
+  getElementContent: (element) ->
+
+    return element.value if element.tagName is "INPUT"
+    return element.innerText
 
 
 
@@ -368,6 +392,17 @@ class TRM
 
     cookie.set(key, data, { expires: newDate, path: "/" })
     return @
+
+
+
+  getParameterByName: (name, url) ->
+    url = window.location.href unless url
+    name = name.replace /[\[\]]/g, "\\$&"
+    regex = new RegExp("[?&]" + name + "(=([^&#]*)|&|#|$)")
+    results = regex.exec(url)
+    return null unless results
+    return '' unless results[2]
+    return decodeURIComponent(results[2].replace(/\+/g, " "))
 
 
 
