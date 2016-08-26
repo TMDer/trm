@@ -27,23 +27,36 @@ module.exports = exports = {
   resultDisplay: function(_arg) {
     var aid, code, pid;
     code = _arg.code, pid = _arg.pid, aid = _arg.aid;
-    code = code.replace(/{ENV_PATH}/g, this.optUrl + pid);
+    code = code.replace(/{ENV_PATH}/g, this.optUrl + pid + "&v=" + VERSION);
     return code + "window.analytics.load(function () {\n  window.analytics.setNGo({\"email\": \"aaa@bbb.cc\"});\n});";
   },
   compress: function(filepath, opt) {
-    var code, file, result;
+    var code, file, result, version;
     filepath = filepath || path.join(__dirname, "./cap_usage.js");
+    version = this.getLatestVersion();
     file = fs.readFileSync(filepath, "utf8");
-    file = file.replace("{VERSION}", VERSION);
+    file = file.replace("{VERSION}", version);
     code = file;
     result = this.compressContent(code);
     return result;
   },
   generateLib: function(config) {
+    var self, versions;
+    self = this;
+    versions = config.versions;
+    return versions.map(function(version) {
+      return self.composeFile.call(self, version, config);
+    });
+  },
+  composeFile: function(version, config) {
     var destPath, domain, filepath, minify, self, srcPath;
     self = this;
     domain = config.domain, destPath = config.destPath, srcPath = config.srcPath, minify = config.minify;
-    filepath = srcPath || path.join(__dirname, "./cap_trm.js");
+    if (version === this.getLatestVersion()) {
+      filepath = srcPath || path.join(__dirname, "./cap_trm.js");
+    } else {
+      filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js");
+    }
     return new Promise(function(resolve, reject) {
       var b;
       b = browserify();
@@ -59,7 +72,9 @@ module.exports = exports = {
           file = self.compressContent(file);
           file = file.code;
         }
-        if (!destPath) {
+        if (destPath) {
+          destPath = destPath.replace("{VERSION}", version);
+        } else {
           return reject();
         }
         destPath = path.join(process.cwd(), destPath);
@@ -67,6 +82,9 @@ module.exports = exports = {
         return resolve(file);
       });
     });
+  },
+  getLatestVersion: function() {
+    return VERSION;
   },
   compressContent: function(content) {
     return UglifyJS.minify(content, {

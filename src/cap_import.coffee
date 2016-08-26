@@ -22,7 +22,7 @@ module.exports = exports = {
 
   resultDisplay: ({code, pid, aid}) ->
 
-    code = code.replace /{ENV_PATH}/g, @optUrl + pid
+    code = code.replace /{ENV_PATH}/g, @optUrl + pid + "&v=" + VERSION
 
     return code + """
       window.analytics.load(function () {
@@ -33,8 +33,10 @@ module.exports = exports = {
   compress: (filepath, opt) ->
     filepath = filepath || path.join(__dirname, "./cap_usage.js")
 
+    version = @getLatestVersion()
+
     file = fs.readFileSync filepath, "utf8"
-    file = file.replace "{VERSION}", VERSION
+    file = file.replace "{VERSION}", version
     code = file
     result = @.compressContent code
     return result
@@ -45,14 +47,30 @@ module.exports = exports = {
   generateLib: (config) ->
 
     self = @
+    versions = config.versions
+
+    return versions.map (version) ->
+      return self.composeFile.call(self, version, config)
+
+
+
+  composeFile: (version, config) ->
+
+    self = @
     {domain, destPath, srcPath, minify} = config
-    filepath = srcPath || path.join(__dirname, "./cap_trm.js")
+
+    if version is @getLatestVersion()
+      filepath = srcPath || path.join(__dirname, "./cap_trm.js")
+    else
+      filepath = srcPath || path.join(__dirname, "./cap_trm_" + version + ".js") 
 
     # will return a promise module
     return new Promise (resolve, reject) ->
+      
       b = browserify()
       b.add(filepath)
       b.bundle (err, src) ->
+
         return reject(err) if err
 
         file = src.toString()
@@ -62,13 +80,20 @@ module.exports = exports = {
           file = self.compressContent(file)
           file = file.code
 
-        unless destPath
+        if destPath
+          destPath = destPath.replace "{VERSION}", version
+        else
           return reject()
 
         destPath = path.join(process.cwd(), destPath)
         self.saveFile(destPath, file)
 
         resolve(file)
+
+
+
+  getLatestVersion: () ->
+    return VERSION
 
   compressContent: (content) ->
     return UglifyJS.minify(content, {fromString: true})
