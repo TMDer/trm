@@ -162,7 +162,7 @@ TRM = (function() {
   };
 
   TRM.prototype.process = function(trigger, callback) {
-    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, fbDataForViewContent, step, that, totalPrice, totalPrices, triggerTarget;
+    var data, elementsObj, eventData, fbDataArray, fbDataForInitiateCheckout, fbDataForViewContent, productPageType, step, that, totalPrice, totalPrices, triggerTarget;
     that = this;
     elementsObj = trigger.elementsObj;
     data = this.collectElementsData(elementsObj);
@@ -171,6 +171,10 @@ TRM = (function() {
     }
     data.triggerEventId = trigger.id;
     triggerTarget = trigger.triggerTarget;
+    productPageType = trigger.productPageType;
+    if (productPageType) {
+      data.productPageType = productPageType;
+    }
     fbDataArray = this.transformData(triggerTarget, data);
     if (fbDataArray[1] === "CheckoutFlow") {
       step = trigger.emitStep;

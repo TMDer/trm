@@ -163,6 +163,9 @@ class TRM
     data.triggerEventId = trigger.id
 
     triggerTarget = trigger.triggerTarget
+    productPageType = trigger.productPageType
+    data.productPageType = productPageType if productPageType
+
     fbDataArray = @transformData triggerTarget, data
 
     # If CheckoutFlow, touch CheckoutFlow + emitStep
